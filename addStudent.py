@@ -123,6 +123,8 @@ addbtn = Button(frame,
                 cursor='hand2')
 addbtn.place(x=330,y=207)
 
+#add table
+
 
 
 root.mainloop()
