@@ -124,7 +124,48 @@ addbtn = Button(frame,
 addbtn.place(x=330,y=207)
 
 #add table
+my_tree = ttk.Treeview(frame,height=6)
+my_tree['columns'] = ("CID","CName")
+custom_font =('Microsoft YaHei UI Light',10)
+my_tree.tag_configure("custom_font",font=custom_font)
+#set style
+s = ttk.Style()
+s.theme_use('clam')
+s.configure('Treeview.Heading',bg="white",font=('Microsoft YaHei UI Light',8, 'bold'), height=15)
+s.configure('Treeview',rowheight=20)
+#format column
+my_tree.column('#0',width=0,stretch='no')
+my_tree.column('CID',width=100,anchor=CENTER)
+my_tree.column('CName',width=300,anchor=W)
+#create heading
+my_tree.heading('CID',text="ID",anchor=CENTER)
+my_tree.heading('CName',text="Course Name",anchor=CENTER)
 
+my_tree.place(x=30,y=250)
+
+# add save,exit and reset button
+savebtn = Button(frame,
+                text="Save",
+                bg="#57a1f8",
+                fg="white",
+                width=10,
+                height=0,
+                pady=2,
+                cursor='hand2',
+                border=0,
+                font=('Microsoft YaHei UI Light',11, 'bold'))
+savebtn.place(x=330,y=430)
+
+exitbtn = Button(frame,
+                text="Exit",
+                border=0,
+                bg="white",
+                fg='#000000',
+                cursor='hand2',
+                font=('Microsoft YaHei UI Light',8),
+                width=10,
+                height=0)
+exitbtn.place(x=350,y=465)
 
 
 root.mainloop()
