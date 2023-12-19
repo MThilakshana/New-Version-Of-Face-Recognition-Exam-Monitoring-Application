@@ -10,6 +10,20 @@ mydb = mysql.connector.connect(
     database="learnmaster"
 )
 
+#exit window
+def exitwindow():
+    root.destroy()
+    
+#add data to table
+def addData():
+    subject = dropdown.get()
+    sql = "SELECT CID FROM classdetails WHERE CName = %s"
+    cursor.execute(sql,(subject,))
+    id = cursor.fetchone()
+    cid = id[0]
+    my_tree.insert('','end',values=(cid,subject))
+    
+
 #load data to dropdowan box
 cursor = mydb.cursor()
 cursor.execute("SELECT CID,CName FROM classdetails")
@@ -120,7 +134,8 @@ addbtn = Button(frame,
                 border=0,
                 pady=2,
                 fg='White',
-                cursor='hand2')
+                cursor='hand2',
+                command=addData)
 addbtn.place(x=330,y=207)
 
 #add table
@@ -164,7 +179,7 @@ exitbtn = Button(frame,
                 cursor='hand2',
                 font=('Microsoft YaHei UI Light',8),
                 width=10,
-                height=0)
+                height=0,command=exitwindow)
 exitbtn.place(x=350,y=465)
 
 
