@@ -24,6 +24,16 @@ def addData():
     my_tree.insert('','end',values=(cid,subject))
     
 
+def read():
+    allItem = my_tree.get_children()
+    
+    for item in allItem:
+        values = my_tree.item(item,'values')
+        print(values)
+        sql = "INSERT INTO students VALUES(%s,%s,%s,%s)"
+        cursor.execute()
+    
+
 #load data to dropdowan box
 cursor = mydb.cursor()
 cursor.execute("SELECT CID,CName FROM classdetails")
@@ -108,6 +118,7 @@ Frame(frame,
       height=2,
       bg='black').place(x=25,y=172)
 
+
 #add drop box
 def on_select(e):
     selectedItem = dropdown.get()
@@ -168,7 +179,8 @@ savebtn = Button(frame,
                 pady=2,
                 cursor='hand2',
                 border=0,
-                font=('Microsoft YaHei UI Light',11, 'bold'))
+                font=('Microsoft YaHei UI Light',11, 'bold'),
+                command=read)
 savebtn.place(x=330,y=430)
 
 exitbtn = Button(frame,
