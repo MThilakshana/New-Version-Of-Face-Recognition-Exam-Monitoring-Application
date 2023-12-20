@@ -34,26 +34,29 @@ def generateId():
     
 #save data in database
 def read():
-    id = generateId()
-    nameV = name.get()
-    emailV = email.get()
-    record=(id,nameV,emailV)
-    sql = "INSERT INTO students VALUES(%s,%s,%s)"
-    cursor.execute(sql,record)
-    mydb.commit()
-    
-    allItem = my_tree.get_children()
-    
-    for item in allItem:
-        values = my_tree.item(item,'values')
-        classid = values[0]
-        record2=(id,classid)
-        sql2 = "INSERT INTO studentcourse VALUES(%s,%s)"
-        cursor.execute(sql2,record2)
+    if(name.get()=="" or email.get()==""):
+        messagebox.showinfo("Message","Enter Name and Email")
+    else:
+        id = generateId()
+        nameV = name.get()
+        emailV = email.get()
+        record=(id,nameV,emailV)
+        sql = "INSERT INTO students VALUES(%s,%s,%s)"
+        cursor.execute(sql,record)
         mydb.commit()
-    
-    messagebox.showinfo("Message","Data Saved Successfully")
-    root.destroy()
+        
+        allItem = my_tree.get_children()
+        
+        for item in allItem:
+            values = my_tree.item(item,'values')
+            classid = values[0]
+            record2=(id,classid)
+            sql2 = "INSERT INTO studentcourse VALUES(%s,%s)"
+            cursor.execute(sql2,record2)
+            mydb.commit()
+        
+        messagebox.showinfo("Message","Data Saved Successfully")
+        root.destroy()
     
 
 #load data to dropdowan box
@@ -191,7 +194,7 @@ my_tree.heading('CName',text="Course Name",anchor=CENTER)
 
 my_tree.place(x=30,y=250)
 
-# add save,exit and reset button
+# add save,exit button
 savebtn = Button(frame,
                 text="Save",
                 bg="#57a1f8",

@@ -127,7 +127,6 @@ startDate = Entry(frame,
              textvariable=selected_date_var)
 startDate.place(x=30,y=145)
 startDate.insert(0,'Start Date')
-#startDate.config(state='readonly')
 startDate.bind('<Button-1>',lambda event: open_date_chooser())
 startDate.bind('<FocusOut>',on_leave)
 
