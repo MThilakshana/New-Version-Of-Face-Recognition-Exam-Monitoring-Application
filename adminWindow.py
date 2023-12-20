@@ -15,7 +15,13 @@ def openaddClass():
       result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/addClass.py'], check=True)
       root.destroy()
       result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/adminWindow.py'], check=True)
-      
+
+#open editclass Window
+def openeditClass():
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/editClass.py'], check=True)
+      root.destroy()
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/adminWindow.py'], check=True)
+    
 #open addStudent Window
 def openaddStudent():
       result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/addStudent.py'], check=True)
@@ -169,7 +175,8 @@ editlecutre = Button(blueframe,
                       cursor="hand2",
                       width=22,
                       font=('Microsoft YaHei UI Light',13,'bold'),
-                      anchor='w')
+                      anchor='w',
+                      command=openeditClass)
 editlecutre.place(x=5,y=240)
 
 editstudent = Button(blueframe,
