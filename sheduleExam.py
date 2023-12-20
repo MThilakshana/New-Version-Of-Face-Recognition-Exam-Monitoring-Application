@@ -1,14 +1,47 @@
+from tkinter import messagebox
+import mysql.connector
 from tkcalendar import Calendar
 from tkinter import *
 from tkinter import ttk
+
+#connect to the database
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="learnmaster"
+)
+cursor = mydb.cursor()
 
 #exit button
 def exitwindow():
     root.destroy()
     
+#generate exam id
+def genexamsid():
+    sql = "SELECT COUNT(*) FROM examdetails"
+    cursor.execute(sql)
+    data = cursor.fetchone()
+    id = int(data[0])+1
+    examID = "EXM"+str(id)
+    return examID
+    
 #save data
 def read():
-    print('hello')
+    if(sid.get()=="Subject ID" or name.get()=="Exam Name" or time.get()=="Time (08:30 AM)" or examDate.get()=="Exam Date"):
+        messagebox.showinfo("Warning", "All field required!")
+    else:
+        examID = genexamsid()
+        subid = sid.get()
+        ename = name.get()
+        etime = time.get()
+        edate = examDate.get()
+        record = (examID,ename,etime,edate,subid)
+        sql = "INSERT INTO examdetails VALUES(%s,%s,%s,%s,%s)"
+        cursor.execute(sql,record)
+        mydb.commit()
+        messagebox.showinfo("Message", "Data Saved Successfully!")
+        root.destroy()
 
 root=Tk()
 root.title('Shedule Exam - LearnMaster 1.0')
@@ -18,7 +51,7 @@ root.resizable(False,False)
 
 #open date chooser
 def open_date_chooser():
-    startDate.delete(0,'end')
+    examDate.delete(0,'end')
     date_chooser_window = Toplevel(root)
     
     def get_selected_date():

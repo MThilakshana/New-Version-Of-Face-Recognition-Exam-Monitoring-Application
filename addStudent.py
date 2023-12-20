@@ -34,7 +34,7 @@ def generateId():
     
 #save data in database
 def read():
-    if(name.get()=="" or email.get()==""):
+    if(name.get()=="Name" or email.get()=="Email"):
         messagebox.showinfo("Message","Enter Name and Email")
     else:
         id = generateId()

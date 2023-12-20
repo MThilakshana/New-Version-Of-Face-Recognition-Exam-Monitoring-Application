@@ -21,7 +21,13 @@ def openaddStudent():
       result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/addStudent.py'], check=True)
       root.destroy()
       result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/adminWindow.py'], check=True)
-        
+
+#open addStudent Window
+def openexamshedule():
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/sheduleExam.py'], check=True)
+      root.destroy()
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/adminWindow.py'], check=True)
+      
 def addDataToStudentTable():
       my_tree.delete(*my_tree.get_children())
       mysql = "SELECT SID,Name,Email from students"
@@ -42,7 +48,7 @@ def addDataToClassTable():
             
 def addDataToExamTable():
       exam_tree.delete(*exam_tree.get_children())
-      mysql = "SELECT EID,EName,ExamDate	FROM examdetails"
+      mysql = "SELECT EID,Name,Date	FROM examdetails"
       cursor.execute(mysql)
       count = 0
       for row in cursor:
@@ -151,7 +157,8 @@ shedulexam = Button(blueframe,
                       cursor="hand2",
                       width=22,
                       font=('Microsoft YaHei UI Light',13,'bold'),
-                      anchor='w')
+                      anchor='w',
+                      command=openexamshedule)
 shedulexam.place(x=5,y=200)
 
 editlecutre = Button(blueframe,
@@ -277,8 +284,8 @@ exam_tree.tag_configure('custom_font',font=custom_font)
 
 exam_tree.column('#0',width=0,stretch='no')
 exam_tree.column('EID',width=50,anchor=CENTER)
-exam_tree.column('Exam',width=100,anchor=W)
-exam_tree.column('Date',width=100,anchor=W)
+exam_tree.column('Exam',width=150,anchor=W)
+exam_tree.column('Date',width=50,anchor=W)
 
 exam_tree.heading('EID',text='EID',anchor=CENTER)
 exam_tree.heading('Exam',text='Exam',anchor=CENTER)
