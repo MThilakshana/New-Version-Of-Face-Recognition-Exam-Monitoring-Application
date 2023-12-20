@@ -34,16 +34,22 @@ def generateId():
     
 #save data in database
 def read():
-    allItem = my_tree.get_children()
     id = generateId()
+    nameV = name.get()
+    emailV = email.get()
+    record=(id,nameV,emailV)
+    sql = "INSERT INTO students VALUES(%s,%s,%s)"
+    cursor.execute(sql,record)
+    mydb.commit()
+    
+    allItem = my_tree.get_children()
+    
     for item in allItem:
         values = my_tree.item(item,'values')
         classid = values[0]
-        nameV = name.get()
-        emailV = email.get()
-        record=(id,nameV,emailV,classid)
-        sql = "INSERT INTO students VALUES(%s,%s,%s,%s)"
-        cursor.execute(sql,record)
+        record2=(id,classid)
+        sql2 = "INSERT INTO studentcourse VALUES(%s,%s)"
+        cursor.execute(sql2,record2)
         mydb.commit()
     
     messagebox.showinfo("Message","Data Saved Successfully")

@@ -24,7 +24,7 @@ def openaddStudent():
         
 def addDataToStudentTable():
       my_tree.delete(*my_tree.get_children())
-      mysql = "SELECT SID,Name,Email from studentdetails"
+      mysql = "SELECT SID,Name,Email from students"
       cursor.execute(mysql)
       count = 0
       for row in cursor:
