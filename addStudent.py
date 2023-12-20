@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 import mysql.connector
 
 #connect to the database
@@ -23,15 +24,30 @@ def addData():
     cid = id[0]
     my_tree.insert('','end',values=(cid,subject))
     
-
+#generate student id
+def generateId():
+    cursor.execute("SELECT COUNT(*) FROM students")
+    data = cursor.fetchone()
+    sid = int(data[0])+1
+    id = "STU"+str(sid)
+    return id
+    
+#save data in database
 def read():
     allItem = my_tree.get_children()
-    
+    id = generateId()
     for item in allItem:
         values = my_tree.item(item,'values')
-        print(values)
+        classid = values[0]
+        nameV = name.get()
+        emailV = email.get()
+        record=(id,nameV,emailV,classid)
         sql = "INSERT INTO students VALUES(%s,%s,%s,%s)"
-        cursor.execute()
+        cursor.execute(sql,record)
+        mydb.commit()
+    
+    messagebox.showinfo("Message","Data Saved Successfully")
+    root.destroy()
     
 
 #load data to dropdowan box
