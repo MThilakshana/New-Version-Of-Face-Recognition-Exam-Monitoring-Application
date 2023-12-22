@@ -133,7 +133,7 @@ Label(blueframe,
 
 #make blue frame
 startlecture = Button(blueframe,
-                      text="Start Lecture",
+                      text="Start Class",
                       border=0,
                       bg="#57a1f8",
                       fg='white',
@@ -180,7 +180,7 @@ shedulexam = Button(blueframe,
 shedulexam.place(x=5,y=200)
 
 editlecutre = Button(blueframe,
-                      text="Edit Lecture Details",
+                      text="Edit Class Details",
                       border=0,
                       bg="#57a1f8",
                       fg='white',
