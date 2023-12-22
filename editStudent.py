@@ -11,124 +11,126 @@ mydb = mysql.connector.connect(
 )
 cursor = mydb.cursor()
 
-#load data 
-def loaddata():
-    try:
-        cidVal = cid.get()
-        record = (cidVal)
-        sql = "SELECT CName, StartDate FROM classdetails WHERE CID = %s"
-        cursor.execute(sql,(record,))
-        data = cursor.fetchone()
-        
-        if(data==None):
-            messagebox.showinfo("Warning","Invalid Class ID")
-            cid.delete(0,'end')
-        else:
-            cname.insert(0,data[0])
-            cdate.insert(0,data[1])
-    except mysql.connector.Error as err:
-        messagebox.showinfo("Warning","Error Detected!")
-
-#delete data
-def deleteData():
-    sql = "DELETE FROM classdetails WHERE CID = %s"
-    record = cid.get()
+#load function
+def loadData():
+    sidval = sid.get()
+    record = (sidval)
+    sql = "SELECT Name,Email FROM students WHERE SID=%s"
     cursor.execute(sql,(record,))
-    mydb.commit()
-    messagebox.showinfo("Message","Data Deleted Successfully!")
-    root.destroy()
+    data = cursor.fetchone()
     
-#update data
+    if(data==None):
+        messagebox.showinfo("Warning","Invalid Class ID")
+        sid.delete(0,'end')
+    else:
+        sname.insert(0,data[0])
+        email.insert(0,data[1])
+        
+#update function
 def updateData():
-    clasid = cid.get()
-    nameclass = cname.get()
-    clsdate = cdate.get()
-    record = (nameclass,clsdate,clasid)
-    sql = "UPDATE classdetails set CName=%s, StartDate=%s WHERE CID=%s"
+    stuid = sid.get()
+    namestudent =sname.get()
+    emailstu = email.get()
+    record = (namestudent,emailstu,stuid)
+    sql = "UPDATE students SET Name=%s,Email=%s WHERE SID=%s"
     cursor.execute(sql,record)
     mydb.commit()
     messagebox.showinfo("Message","Data Updated Successfully!")
     root.destroy()
     
+#delete function
+def deleteData():
+    sql = "DELETE FROM students WHERE SID = %s"
+    record = sid.get()
+    cursor.execute(sql,(record,))
+    mydb.commit()
+    messagebox.showinfo("Message","Data Deleted Successfully!")
+    root.destroy()
 
 root=Tk()
-root.title('Edit Class Details - LearnMaster 1.0')
-root.geometry('925x350+300+200')
+root.title('Edit Student Details - LearnMaster 1.0')
+root.geometry('835x330+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
 
-label = Label(root,
-              text="Edit Class Details",
+frame = Frame(root,
+              width=500,
+              height=350,
+              bg='white')
+frame.place(x=335,y=0)
+
+label = Label(frame,
+              text="Edit Student Details",
               fg='#57a1f8',
               bg='white',
               font=('Microsoft YaHei UI Light',25,'bold'))
-label.place(x=105,y=0)
+label.place(x=90,y=0)
 
-#add cid label and entry box
-cidlabel = Label(root,
-                 text="Class ID",
+#add sid label and entry box
+sidlabel = Label(frame,
+                 text="Student ID",
                  font=('Microsoft YaHei UI Light',11),
                  fg='Black',
                  bg='White')
-cidlabel.place(x=10,y=70)
+sidlabel.place(x=10,y=70)
 
-cid = Entry(root,
+sid = Entry(frame,
             width=30,
             border=0,
             bg="white",
             font=('Microsoft YaHei UI Light',11),
             fg="black")
-cid.place(x=115,y=70)
+sid.place(x=115,y=70)
 
-Frame(root,
+Frame(frame,
       width=250,
       height=2,
       bg='black').place(x=115,y=100)
 
-#add cname label and entry box
-cnamelabel = Label(root,
-                 text="Class Name",
+#add name label and entry box
+snamelabel = Label(frame,
+                 text="Name",
                  font=('Microsoft YaHei UI Light',11),
                  fg='Black',
                  bg='White')
-cnamelabel.place(x=10,y=140)
+snamelabel.place(x=10,y=140)
 
-cname = Entry(root,
+sname = Entry(frame,
             width=45,
             border=0,
             bg="white",
             font=('Microsoft YaHei UI Light',11),
             fg="black")
-cname.place(x=115,y=140)
+sname.place(x=115,y=140)
 
-Frame(root,
+Frame(frame,
       width=370,
       height=2,
       bg='black').place(x=115,y=170)
 
-#add cdate label and entry box
-cdatelabel = Label(root,
-                 text="Class Date",
+#add email label and entry box
+emaillabel = Label(frame,
+                 text="Email",
                  font=('Microsoft YaHei UI Light',11),
                  fg='Black',
                  bg='White')
-cdatelabel.place(x=10,y=210)
+emaillabel.place(x=10,y=210)
 
-cdate = Entry(root,
+email = Entry(frame,
             width=45,
             border=0,
             bg="white",
             font=('Microsoft YaHei UI Light',11),
             fg="black")
-cdate.place(x=115,y=210)
+email.place(x=115,y=210)
 
-Frame(root,
+Frame(frame,
       width=370,
       height=2,
       bg='black').place(x=115,y=240)
 
 #load button
-addbtn = Button(root,
+addbtn = Button(frame,
                 text="Load",
                 font=('Microsoft YaHei UI Light',11, 'bold'),
                 width=10,
@@ -138,11 +140,11 @@ addbtn = Button(root,
                 pady=2,
                 fg='White',
                 cursor='hand2',
-                command=loaddata)
+                command=loadData)
 addbtn.place(x=380,y=70)
 
 #update button
-updatebtn = Button(root,
+updatebtn = Button(frame,
                 text="Update",
                 font=('Microsoft YaHei UI Light',11, 'bold'),
                 width=10,
@@ -156,7 +158,7 @@ updatebtn = Button(root,
 updatebtn.place(x=380,y=280)
 
 #delete button
-deletebtn = Button(root,
+deletebtn = Button(frame,
                 text="Delete",
                 font=('Microsoft YaHei UI Light',11, 'bold'),
                 width=10,
@@ -170,7 +172,7 @@ deletebtn = Button(root,
 deletebtn.place(x=250,y=280)
 
 #edit button
-extbtn = Button(root,
+extbtn = Button(frame,
                 text="Exit",
                 font=('Microsoft YaHei UI Light',10),
                 width=10,
@@ -185,9 +187,9 @@ extbtn = Button(root,
 extbtn.place(x=10,y=280)
 
 #add image
-img = PhotoImage(file='C:/Users/DELL/Desktop/Python/Project parts/final Project/Images/editexam.png')
+img = PhotoImage(file='C:/Users/DELL/Desktop/Python/Project parts/final Project/Images/editstu.png')
 Label(root,
       image=img,
-      bg='white').place(x=490,y=80)
+      bg='white').place(x=50,y=50)
 
 root.mainloop()
