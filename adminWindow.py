@@ -10,6 +10,18 @@ def exitwin():
     if result:
         root.destroy()
         
+#open editExam window
+def openeditExam():
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/editExam.py'], check=True)
+      root.destroy()
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/adminWindow.py'], check=True)
+ 
+#open editStudent Window
+def openeditStudent():
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/editStudent.py'], check=True)
+      root.destroy()
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/adminWindow.py'], check=True)
+     
 #open addClass Window
 def openaddClass():
       result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/addClass.py'], check=True)
@@ -187,7 +199,8 @@ editstudent = Button(blueframe,
                       cursor="hand2",
                       width=22,
                       font=('Microsoft YaHei UI Light',13,'bold'),
-                      anchor='w')
+                      anchor='w',
+                      command=openeditStudent)
 editstudent.place(x=5,y=280)
 
 editexam = Button(blueframe,
@@ -198,7 +211,8 @@ editexam = Button(blueframe,
                       cursor="hand2",
                       width=22,
                       font=('Microsoft YaHei UI Light',13,'bold'),
-                      anchor='w')
+                      anchor='w',
+                      command=openeditExam)
 editexam.place(x=5,y=320)
 
 exit = Button(blueframe,
