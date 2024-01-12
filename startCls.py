@@ -1,6 +1,5 @@
 from tkinter import *
 
-
 root=Tk()
 root.title('Start Lecture - LearnMaster 1.0')
 root.geometry('775x400+300+200')
@@ -58,9 +57,9 @@ checkbtn.place(x=300,y=70)
 #Class name
 clsnamelb = Label(root,
                   text="Class Name",
-                  font=('Microsoft YaHei UI Light',11,'bold'),
+                  font=('Microsoft YaHei UI Light',11),
                   bg="white",
-                  fg='black').place(x=30,y=145)
+                  fg='black').place(x=25,y=145)
 
 clsnameEntry = Entry(root,
                     width=30,
@@ -69,5 +68,30 @@ clsnameEntry = Entry(root,
                     bg='White',
                     font=('Microsoft YaHei UI Light',11))
 clsnameEntry.place(x=150,y=145)
+
+Frame(root,
+      width=260,
+      height=2,
+      bg='black').place(x=145,y=175)
+
+#No of students
+clsnamelb = Label(root,
+                  text="No Of Students",
+                  font=('Microsoft YaHei UI Light',11),
+                  bg="white",
+                  fg='black').place(x=25,y=215)
+
+clsnameEntry = Entry(root,
+                    width=30,
+                    fg='Black',
+                    border=0,
+                    bg='White',
+                    font=('Microsoft YaHei UI Light',11))
+clsnameEntry.place(x=150,y=215)
+
+Frame(root,
+      width=260,
+      height=2,
+      bg='black').place(x=145,y=245)
 
 root.mainloop()
