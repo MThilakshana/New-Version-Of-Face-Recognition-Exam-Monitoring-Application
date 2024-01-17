@@ -1,4 +1,6 @@
 from tkinter import *
+from tkinter import ttk
+import datetime
 
 root=Tk()
 root.title('Start Lecture - LearnMaster 1.0')
@@ -93,5 +95,28 @@ Frame(root,
       width=260,
       height=2,
       bg='black').place(x=145,y=245)
+
+#Date
+clsdatelb = Label(root,
+                  text="Date",
+                  font=('Microsoft YaHei UI Light',11),
+                  bg="white",
+                  fg='black').place(x=25,y=285)
+
+dateEntry = Entry(root,
+                    width=30,
+                    fg='Black',
+                    border=0,
+                    bg='White',
+                    font=('Microsoft YaHei UI Light',11))
+dateEntry.place(x=150,y=285)
+
+Frame(root,
+      width=260,
+      height=2,
+      bg='black').place(x=145,y=315)
+
+
+
 
 root.mainloop()
