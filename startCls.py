@@ -1,10 +1,10 @@
 from tkinter import *
 from tkinter import ttk
-import datetime
+from datetime import datetime, time
 
 root=Tk()
 root.title('Start Lecture - LearnMaster 1.0')
-root.geometry('775x400+300+200')
+root.geometry('435x550+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
 
@@ -14,7 +14,7 @@ heading = Label(root,
                 fg='#57a1f8',
                 bg='white',
                 font=('Microsoft YaHei UI Light',25,'bold'))
-heading.place(x=30,y=0)
+heading.pack(fill=X)
 
 #entry box for class id
 def on_enter(e):
@@ -112,9 +112,49 @@ dateEntry = Entry(root,
 dateEntry.place(x=150,y=285)
 
 Frame(root,
-      width=260,
+     width=260,
       height=2,
       bg='black').place(x=145,y=315)
+
+#time
+clstimelb = Label(root,
+                  text="Time",
+                  font=('Microsoft YaHei UI Light',11),
+                  bg="white",
+                  fg='black').place(x=25,y=355)
+
+current_time = datetime.now().time()
+
+hours = [str(i).zfill(2) for i in range(24)]
+hours_var = StringVar(value=current_time.strftime("%H"))
+hour_combo = ttk.Combobox(root,
+                          values=hours,
+                          width=5,
+                          font=('Microsoft YaHei UI Light',11),
+                          textvariable=hours_var)
+hour_combo.place(x=150,y=355)
+
+# Create a Combobox for minutes
+minutes = [str(i).zfill(2) for i in range(60)]
+minutes_var = StringVar(value=current_time.strftime("%M"))
+minute_combo = ttk.Combobox(root,
+                            values=minutes,
+                            font=('Microsoft YaHei UI Light',11),
+                            width=5,
+                            textvariable=minutes_var)
+minute_combo.place(x=270,y=355)
+
+hlb = Label(root,
+            text="Hours",
+            font=('Microsoft YaHei UI Light',11),
+            fg="black",
+            bg='white').place(x=220,y=355)
+mlb = Label(root,
+            text="Minutes",
+            font=('Microsoft YaHei UI Light',11),
+            fg="black",
+            bg='white').place(x=340,y=355)
+
 
 
 
