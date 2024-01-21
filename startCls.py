@@ -4,7 +4,7 @@ from datetime import datetime, time
 
 root=Tk()
 root.title('Start Lecture - LearnMaster 1.0')
-root.geometry('435x550+300+200')
+root.geometry('435x500+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
 
@@ -155,10 +155,32 @@ mlb = Label(root,
             fg="black",
             bg='white').place(x=340,y=355)
 
+#start button
+startbtn = Button(root,
+                text="Start",
+                bg="#57a1f8",
+                fg="white",
+                width=10,
+                height=0,
+                pady=2,
+                cursor='hand2',
+                border=0,
+                font=('Microsoft YaHei UI Light',11, 'bold'))
+startbtn.place(x=168,y=435)
 
-
-
-
+#exit button
+exitbtn = Button(root,
+                text="Exit",
+                bg="white",
+                fg="black",
+                width=10,
+                height=0,
+                pady=2,
+                cursor='hand2',
+                border=0,
+                font=('Microsoft YaHei UI Light',8),
+                command=root.destroy)
+exitbtn.place(x=188,y=468)
 
 
 root.mainloop()
