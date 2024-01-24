@@ -77,8 +77,9 @@ def startClass():
             
             saveData = {"Class_ID":class_id,"Class_Name":class_Name,"Student_ID":st_id,"Student_Name":st_name,"Student_Email":st_email,"Class_Date":class_date,"Class_Time":class_time}
             
+            path = st_id+"_"+class_id
             #save data
-            response = database.push(saveData)
+            response = database.child("StudentCourse").child(path).set(saveData)
             
       messagebox.showinfo("Message","Class Ready to Start!")
       root.destroy() 
