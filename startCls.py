@@ -1,6 +1,42 @@
 from tkinter import *
 from tkinter import ttk
 from datetime import datetime, time
+import mysql.connector
+from tkinter import messagebox
+
+#connect to the database
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="learnmaster"
+)
+cursor = mydb.cursor()
+
+#check details of class
+def checkBtn():
+      if(cid.get()=="Class ID"):
+            messagebox.showinfo("Warning","Enter Class ID")
+      else:
+            sql = "SELECT CName FROM classdetails WHERE CID = %s"
+            record = (cid.get(),)
+            cursor.execute(sql,record)
+            cname = cursor.fetchone()
+            
+            if(cname==None):
+                  messagebox.showinfo("Warning","Invalid Class ID!")
+            else:
+                  clsnameEntry.insert(0,cname[0])
+                  
+            sql = "SELECT SID FROM studentcourse WHERE CID = %s"
+            cursor.execute(sql,record)
+            data = cursor.fetchall()
+            stcount = 0
+            for row in data:
+                  stcount = stcount +1 
+            
+            stucount.insert(0,stcount)
+                  
 
 root=Tk()
 root.title('Start Lecture - LearnMaster 1.0')
@@ -52,7 +88,8 @@ checkbtn = Button(root,
                 pady=2,
                 cursor='hand2',
                 border=0,
-                font=('Microsoft YaHei UI Light',11, 'bold'))
+                font=('Microsoft YaHei UI Light',11, 'bold'),
+                command=checkBtn)
 checkbtn.place(x=300,y=70)
 
 
@@ -83,13 +120,13 @@ clsnamelb = Label(root,
                   bg="white",
                   fg='black').place(x=25,y=215)
 
-clsnameEntry = Entry(root,
+stucount = Entry(root,
                     width=30,
                     fg='Black',
                     border=0,
                     bg='White',
                     font=('Microsoft YaHei UI Light',11))
-clsnameEntry.place(x=150,y=215)
+stucount.place(x=150,y=215)
 
 Frame(root,
       width=260,
