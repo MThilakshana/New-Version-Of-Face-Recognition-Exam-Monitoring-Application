@@ -1,8 +1,9 @@
 from tkinter import *
 from tkinter import ttk
-from datetime import datetime, time
+from datetime import datetime
 import mysql.connector
 from tkinter import messagebox
+import pyrebase
 
 #connect to the database
 mydb = mysql.connector.connect(
@@ -36,13 +37,61 @@ def checkBtn():
                   stcount = stcount +1 
             
             stucount.insert(0,stcount)
-                  
+            
+            
+            
+#add function to start button
+def startClass():
+      
+      class_Name = clsnameEntry.get()
+      class_id = cid.get()
+      class_date = dateEntry.get()
+      class_time = hour_combo.get() + ":" + minute_combo.get()
+      
+      sql = "SELECT students.Name, students.SID, students.Email FROM students JOIN studentcourse ON students.SID = studentcourse.SID WHERE studentcourse.CID = %s"
+      record = (class_id,)
+      cursor.execute(sql,record)
+      data = cursor.fetchall()
+      
+            
+      #connect to the Firebase
+      config = {
+            "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+            "authDomain": "edumaster-project.firebaseapp.com",
+            "projectId": "edumaster-project",
+            "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+            "storageBucket": "edumaster-project.appspot.com",
+            "messagingSenderId": "945743272123",
+            "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+            "measurementId": "G-XNK127X4XJ"
+      }
+      
+      firebase = pyrebase.initialize_app(config)
+      database = firebase.database()
+      
+      #add data to firebase
+      for row in data:
+            st_name = row[0]
+            st_id = row[1]
+            st_email = row[2]
+            
+            saveData = {"Class_ID":class_id,"Class_Name":class_Name,"Student_ID":st_id,"Student_Name":st_name,"Student_Email":st_email,"Class_Date":class_date,"Class_Time":class_time}
+            
+            #save data
+            response = database.push(saveData)
+            
+      messagebox.showinfo("Message","Class Ready to Start!")
+      root.destroy() 
 
 root=Tk()
 root.title('Start Lecture - LearnMaster 1.0')
 root.geometry('435x500+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
+
+#get date
+current_date = datetime.now()
+formatted_date = current_date.strftime('%Y-%m-%d')
 
 #add heading
 heading = Label(root,
@@ -148,6 +197,9 @@ dateEntry = Entry(root,
                     font=('Microsoft YaHei UI Light',11))
 dateEntry.place(x=150,y=285)
 
+#add date to date Entry
+dateEntry.insert(0,formatted_date)
+
 Frame(root,
      width=260,
       height=2,
@@ -202,7 +254,8 @@ startbtn = Button(root,
                 pady=2,
                 cursor='hand2',
                 border=0,
-                font=('Microsoft YaHei UI Light',11, 'bold'))
+                font=('Microsoft YaHei UI Light',11, 'bold'),
+                command=startClass)
 startbtn.place(x=168,y=435)
 
 #exit button
