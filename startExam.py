@@ -99,19 +99,19 @@ Frame(root,
       bg='black').place(x=145,y=175)
 
 #No of students
-stcountlb = Label(root,
-                  text="No Of Students",
+subidlb = Label(root,
+                  text="Subject ID",
                   font=('Microsoft YaHei UI Light',11),
                   bg="white",
                   fg='black').place(x=25,y=215)
 
-stucount = Entry(root,
+sid = Entry(root,
                     width=30,
                     fg='Black',
                     border=0,
                     bg='White',
                     font=('Microsoft YaHei UI Light',11))
-stucount.place(x=150,y=215)
+sid.place(x=150,y=215)
 
 Frame(root,
       width=260,
