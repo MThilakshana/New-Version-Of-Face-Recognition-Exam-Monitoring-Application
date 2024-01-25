@@ -82,6 +82,7 @@ def startClass():
             response = database.child("StudentCourse").child(path).set(saveData)
             
       messagebox.showinfo("Message","Class Ready to Start!")
+      cursor.close()
       root.destroy() 
 
 root=Tk()
@@ -164,7 +165,7 @@ Frame(root,
       bg='black').place(x=145,y=175)
 
 #No of students
-clsnamelb = Label(root,
+stcountlb = Label(root,
                   text="No Of Students",
                   font=('Microsoft YaHei UI Light',11),
                   bg="white",

@@ -5,6 +5,16 @@ import mysql.connector
 from tkinter import messagebox
 import pyrebase
 
+#connect to the database
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="learnmaster"
+)
+cursor = mydb.cursor()
+
+
 #check btn function
 def checkBtn():
     x = 1
