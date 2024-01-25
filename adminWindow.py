@@ -215,6 +215,17 @@ editexam = Button(blueframe,
                       command=openeditExam)
 editexam.place(x=5,y=320)
 
+startExam = Button(blueframe,
+                      text="Start Exam",
+                      border=0,
+                      bg="#57a1f8",
+                      fg='white',
+                      cursor="hand2",
+                      width=22,
+                      font=('Microsoft YaHei UI Light',13,'bold'),
+                      anchor='w')
+startExam.place(x=5,y=360)
+
 exit = Button(blueframe,
                       text="Exit",
                       border=0,
