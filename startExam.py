@@ -17,7 +17,19 @@ cursor = mydb.cursor()
 
 #check btn function
 def checkBtn():
-    x = 1
+    if(eid.get()=="Exam ID"):
+        messagebox.showinfo("Warning","Enter Exam ID")
+    else:
+        sql = "SELECT Name,Time,Date,SID FROM examdetails WHERE EID = %s"
+        record = (eid.get(),)
+        cursor.execute(sql,record)
+        Name = cursor.fetchone()
+        
+        if(Name==None):
+            messagebox.showinfo("Warning","Invalid Exam ID!")
+        else:
+            examnameEntry.insert(0,Name[0])
+            
     
     
 #start exam button 
@@ -145,37 +157,21 @@ clstimelb = Label(root,
                   bg="white",
                   fg='black').place(x=25,y=355)
 
-current_time = datetime.now().time()
+timeEntry = Entry(root,
+                    width=30,
+                    fg='Black',
+                    border=0,
+                    bg='White',
+                    font=('Microsoft YaHei UI Light',11))
+timeEntry.place(x=150,y=355)
 
-hours = [str(i).zfill(2) for i in range(24)]
-hours_var = StringVar(value=current_time.strftime("%H"))
-hour_combo = ttk.Combobox(root,
-                          values=hours,
-                          width=5,
-                          font=('Microsoft YaHei UI Light',11),
-                          textvariable=hours_var)
-hour_combo.place(x=150,y=355)
+Frame(root,
+     width=260,
+      height=2,
+      bg='black').place(x=145,y=385)
 
-# Create a Combobox for minutes
-minutes = [str(i).zfill(2) for i in range(60)]
-minutes_var = StringVar(value=current_time.strftime("%M"))
-minute_combo = ttk.Combobox(root,
-                            values=minutes,
-                            font=('Microsoft YaHei UI Light',11),
-                            width=5,
-                            textvariable=minutes_var)
-minute_combo.place(x=270,y=355)
 
-hlb = Label(root,
-            text="Hours",
-            font=('Microsoft YaHei UI Light',11),
-            fg="black",
-            bg='white').place(x=220,y=355)
-mlb = Label(root,
-            text="Minutes",
-            font=('Microsoft YaHei UI Light',11),
-            fg="black",
-            bg='white').place(x=340,y=355)
+
 
 #start button
 startbtn = Button(root,
