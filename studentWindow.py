@@ -13,6 +13,18 @@ mydb = mysql.connector.connect(
 )
 cursor = mydb.cursor()
 
+#define join class button
+def joinClass():
+    result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/joinClass.py'], check=True)
+    root.destroy()
+    result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/studentWindow.py'], check=True)
+    
+#define join exam butoon
+def joinExam():
+    result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/joinExam.py'], check=True)
+    root.destroy()
+    result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/studentWindow.py'], check=True)
+
 #define exit button
 def exitwin():
     result = messagebox.askyesno("Confirmation","Do you want to exit?")
@@ -58,7 +70,8 @@ joinclass = Button(blueframe,
                       cursor="hand2",
                       width=22,
                       font=('Microsoft YaHei UI Light',13,'bold'),
-                      anchor='w')
+                      anchor='w',
+                      command=joinClass)
 joinclass.place(x=5,y=80)
 
 joinexam = Button(blueframe,
@@ -69,7 +82,8 @@ joinexam = Button(blueframe,
                       cursor="hand2",
                       width=22,
                       font=('Microsoft YaHei UI Light',13,'bold'),
-                      anchor='w')
+                      anchor='w',
+                      command=joinExam)
 joinexam.place(x=5,y=120)
 
 exit = Button(blueframe,
@@ -84,7 +98,6 @@ exit = Button(blueframe,
                       command=exitwin)
 exit.place(x=5,y=460)
 
-
 #add label
 Label(mainframe,
       text="Dashboard - LearnMaster 1.0",
@@ -94,11 +107,33 @@ Label(mainframe,
       width=45,
       anchor='center').place(x=0,y=10)
 
+#add student table
+my_tree = ttk.Treeview(mainframe,height=18)
+my_tree['columns'] = ("CID","Name","Email")
+custom_font = ('Microsoft YaHei UI Light',10)
+my_tree.tag_configure("custom_font",font=custom_font)
+#set style
+s = ttk.Style()
+s.theme_use('clam')
+s.configure('Treeview.Heading',bg='#57a1f8',font=('Microsoft YaHei UI Light',8, 'bold'), height=15)
+s.configure('Treeview',rowheight=20)
+#foramt column
+my_tree.column('#0',width=0, stretch='no')
+my_tree.column('CID',width=100,anchor=CENTER)
+my_tree.column('Name',width=300,anchor=W)
+my_tree.column('Email',width=300,anchor=W)
+#create headding
+my_tree.heading('CID',text='CID',anchor=CENTER)
+my_tree.heading('Name',text='Name',anchor=CENTER)
+my_tree.heading('Email',text='Email',anchor=CENTER)
 
+my_tree.place(x=10,y=100)
 
-
-
-
-
+#label for table tipoc
+classdetaillabel = Label(mainframe,
+                            text="Participated Class List",
+                            font=('Microsoft YaHei UI Light',12,'bold'),
+                            fg='#57a1f8')
+classdetaillabel.place(x=10,y=70)
 
 root.mainloop()

@@ -11,7 +11,6 @@ mydb = mysql.connector.connect(
     password="",
     database="learnmaster"
 )
-
 cursor = mydb.cursor()
 
 root=Tk()
@@ -73,7 +72,7 @@ def on_leave(e):
         
 def on_enter(e):
     stuid.delete(0,'end')
-    
+   
 stuid = Entry(frame,
              width=30,
              fg='Black',
