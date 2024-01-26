@@ -15,7 +15,7 @@ mydb = mysql.connector.connect(
 cursor = mydb.cursor()
 
 root=Tk()
-root.title('Join To Class - LearnMaster 1.0')
+root.title('Join To Exams - LearnMaster 1.0')
 root.geometry('775x300+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
@@ -33,7 +33,7 @@ frame.place(x=450,y=0)
 
 #add heading
 heading = Label(frame,
-                text='Join To Class',
+                text='Join To Exam',
                 fg='#57a1f8',
                 bg='white',
                 font=('Microsoft YaHei UI Light',25,'bold'))
@@ -46,7 +46,7 @@ def on_enter(e):
 def on_leave(e):
     name1=clsID.get()
     if name1=='':
-        clsID.insert(0,'Class ID')
+        clsID.insert(0,'Exam ID')
         
 clsID = Entry(frame,
              width=30,
@@ -55,7 +55,7 @@ clsID = Entry(frame,
              bg='White',
              font=('Microsoft YaHei UI Light',11))
 clsID.place(x=30,y=75)
-clsID.insert(0,'Class ID')
+clsID.insert(0,'Exam ID')
 clsID.bind('<FocusIn>',on_enter)
 clsID.bind('<FocusOut>', on_leave)
 
@@ -67,23 +67,23 @@ Frame(frame,
 
 #add date chooser
 def on_leave(e):
-    id = subid.get()
+    id = stuid.get()
     if id=='':
-        subid.insert(0,'Subject ID')
+        stuid.insert(0,'Subject ID')
         
 def on_enter(e):
-    subid.delete(0,'end')
+    stuid.delete(0,'end')
     
-subid = Entry(frame,
+stuid = Entry(frame,
              width=30,
              fg='Black',
              border=0,
              bg='White',
              font=('Microsoft YaHei UI Light',11))
-subid.place(x=30,y=145)
-subid.insert(0,'Subject ID')
-subid.bind('<FocusIn>',on_enter)
-subid.bind('<FocusOut>', on_leave)
+stuid.place(x=30,y=145)
+stuid.insert(0,'Subject ID')
+stuid.bind('<FocusIn>',on_enter)
+stuid.bind('<FocusOut>', on_leave)
 
 #add line
 Frame(frame,
@@ -95,7 +95,7 @@ Frame(frame,
 Button(frame,
        width=30,
        pady=7,
-       text='Join Class',
+       text='Join Exam',
        bg="#57a1f8",
        fg='white',
        border=0,
