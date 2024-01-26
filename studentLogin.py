@@ -23,8 +23,7 @@ def login():
 
         #check password
         if(password==code.get()):
-            root.destroy()
-            print("Open student window")
+            studentWindow()
         else:
             messagebox.showinfo("Warning", "Incorrect Password or Username")
         cursor.close()
@@ -35,6 +34,11 @@ def login():
 def registerWindow():
     root.destroy()
     p_result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/RegistrationWindow.py'], check=True)
+    
+#open student window
+def studentWindow():
+    root.destroy()
+    p_result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/studentWindow.py'], check=True)
 
 root=Tk()
 root.title('Login as Student - LearnMaster 1.0')

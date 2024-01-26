@@ -50,7 +50,7 @@ Label(blueframe,
       bg="#57a1f8").place(x=50,y=5)
 
 #make blue frame
-startlecture = Button(blueframe,
+joinclass = Button(blueframe,
                       text="Join Class",
                       border=0,
                       bg="#57a1f8",
@@ -59,9 +59,18 @@ startlecture = Button(blueframe,
                       width=22,
                       font=('Microsoft YaHei UI Light',13,'bold'),
                       anchor='w')
-startlecture.place(x=5,y=80)
+joinclass.place(x=5,y=80)
 
-
+joinexam = Button(blueframe,
+                      text="Join Exam",
+                      border=0,
+                      bg="#57a1f8",
+                      fg='white',
+                      cursor="hand2",
+                      width=22,
+                      font=('Microsoft YaHei UI Light',13,'bold'),
+                      anchor='w')
+joinexam.place(x=5,y=120)
 
 exit = Button(blueframe,
                       text="Exit",
