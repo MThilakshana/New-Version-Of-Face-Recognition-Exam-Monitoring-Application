@@ -4,8 +4,6 @@ import cv2
 from tkinter import messagebox
 from datetime import datetime
 
-imagefilepath = ""
-
 #connect to the database
 mydb = mysql.connector.connect(
     host="localhost",

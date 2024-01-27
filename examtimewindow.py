@@ -84,7 +84,7 @@ def assignvalue(eid,sid):
     endbtn = Button(root,
                     width=30,
                     pady=7,
-                    text='End Class',
+                    text='End Exam',
                     bg="#57a1f8",
                     fg='white',
                     border=0,

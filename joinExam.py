@@ -13,6 +13,9 @@ mydb = mysql.connector.connect(
 )
 cursor = mydb.cursor()
 
+def joinexambtn():
+    if()
+
 root=Tk()
 root.title('Join To Exams - LearnMaster 1.0')
 root.geometry('775x300+300+200')
@@ -40,23 +43,23 @@ heading.place(x=45,y=0)
 
 #entry box for class name
 def on_enter(e):
-    clsID.delete(0,'end')
+    exmid.delete(0,'end')
     
 def on_leave(e):
-    name1=clsID.get()
+    name1=exmid.get()
     if name1=='':
-        clsID.insert(0,'Exam ID')
+        exmid.insert(0,'Exam ID')
         
-clsID = Entry(frame,
+exmid = Entry(frame,
              width=30,
              fg='Black',
              border=0,
              bg='White',
              font=('Microsoft YaHei UI Light',11))
-clsID.place(x=30,y=75)
-clsID.insert(0,'Exam ID')
-clsID.bind('<FocusIn>',on_enter)
-clsID.bind('<FocusOut>', on_leave)
+exmid.place(x=30,y=75)
+exmid.insert(0,'Exam ID')
+exmid.bind('<FocusIn>',on_enter)
+exmid.bind('<FocusOut>', on_leave)
 
 #add line
 Frame(frame,
