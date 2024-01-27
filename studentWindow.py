@@ -109,7 +109,7 @@ Label(mainframe,
 
 #add student table
 my_tree = ttk.Treeview(mainframe,height=18)
-my_tree['columns'] = ("CID","Name","Email")
+my_tree['columns'] = ("CID","Date","Time","SID","Status")
 custom_font = ('Microsoft YaHei UI Light',10)
 my_tree.tag_configure("custom_font",font=custom_font)
 #set style
@@ -119,13 +119,17 @@ s.configure('Treeview.Heading',bg='#57a1f8',font=('Microsoft YaHei UI Light',8, 
 s.configure('Treeview',rowheight=20)
 #foramt column
 my_tree.column('#0',width=0, stretch='no')
-my_tree.column('CID',width=100,anchor=CENTER)
-my_tree.column('Name',width=300,anchor=W)
-my_tree.column('Email',width=300,anchor=W)
+my_tree.column('CID',width=140,anchor=CENTER)
+my_tree.column('Date',width=140,anchor=W)
+my_tree.column('Time',width=140,anchor=W)
+my_tree.column('SID',width=140,anchor=W)
+my_tree.column('Status',width=140,anchor=W)
 #create headding
 my_tree.heading('CID',text='CID',anchor=CENTER)
-my_tree.heading('Name',text='Name',anchor=CENTER)
-my_tree.heading('Email',text='Email',anchor=CENTER)
+my_tree.heading('Date',text='Date',anchor=CENTER)
+my_tree.heading('Time',text='Time',anchor=CENTER)
+my_tree.heading('SID',text='SID',anchor=CENTER)
+my_tree.heading('Status',text='Status',anchor=CENTER)
 
 my_tree.place(x=10,y=100)
 

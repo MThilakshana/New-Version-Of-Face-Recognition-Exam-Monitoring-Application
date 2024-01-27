@@ -1,8 +1,12 @@
+import subprocess
 from tkinter import *
-from tkinter import ttk
-from tkcalendar import Calendar
 import mysql.connector
-from tkinter import messagebox
+
+
+    
+def joinclassbtn():
+    from classtimewindow import assignvalue
+    assignvalue(clsID.get(),stuid.get())
 
 #connect to the database
 mydb = mysql.connector.connect(
@@ -67,23 +71,23 @@ Frame(frame,
 
 #add date chooser
 def on_leave(e):
-    id = subid.get()
+    id = stuid.get()
     if id=='':
-        subid.insert(0,'Subject ID')
+        stuid.insert(0,'Student ID')
         
 def on_enter(e):
-    subid.delete(0,'end')
+    stuid.delete(0,'end')
     
-subid = Entry(frame,
+stuid = Entry(frame,
              width=30,
              fg='Black',
              border=0,
              bg='White',
              font=('Microsoft YaHei UI Light',11))
-subid.place(x=30,y=145)
-subid.insert(0,'Subject ID')
-subid.bind('<FocusIn>',on_enter)
-subid.bind('<FocusOut>', on_leave)
+stuid.place(x=30,y=145)
+stuid.insert(0,'Student ID')
+stuid.bind('<FocusIn>',on_enter)
+stuid.bind('<FocusOut>', on_leave)
 
 #add line
 Frame(frame,
@@ -99,7 +103,8 @@ Button(frame,
        bg="#57a1f8",
        fg='white',
        border=0,
-       cursor='hand2').place(x=45,y=200)
+       cursor='hand2',
+       command=joinclassbtn).place(x=45,y=200)
 
 Label(frame,
       text='After join the class this application will capture image\nusing your web camera.',
