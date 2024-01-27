@@ -1,5 +1,35 @@
 from tkinter import *
 import mysql.connector
+import cv2
+from tkinter import messagebox
+
+#connect to the database
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="learnmaster"
+)
+
+cursor = mydb.cursor()
+
+#function for capture images from web cam
+def captureImage():
+    sql = "SELECT COUNT(*) FROM classdatainstudentview"
+    cursor.execute(sql)
+    imagecount = int(cursor.fetchone()[0]) + 1
+    imagepath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/"
+    
+    #capture image
+    cam = cv2.VideoCapture(0)
+    ret, frame= cam.read()
+    if not ret:
+        messagebox.showinfo("Warning","Image capturing Error!")
+    else:
+        imagename = "{}MyImage{}.png".format(imagepath,str(imagecount))
+        cv2.imwrite(imagename,frame)
+        cam.release()
+        cv2.destroyAllWindows()
 
 def endclassbutton():
     x = 0
@@ -7,6 +37,8 @@ def endclassbutton():
 def assignvalue(cid,sid):
     class_id = cid
     student_id = sid
+    
+    captureImage()
     
     root=Tk()
     root.title('End Class - LearnMaster 1.0')

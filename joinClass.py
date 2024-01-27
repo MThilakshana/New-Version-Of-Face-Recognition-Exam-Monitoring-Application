@@ -2,24 +2,41 @@ import subprocess
 from tkinter import *
 import mysql.connector
 from tkinter import messagebox
-
+import pyrebase
 
     
 def joinclassbtn():
     if(clsID.get=="Class ID" or stuid.get()=="Student ID"):
         messagebox.showinfo("Warning","All field required")
     else:
-        
-        
-        
-        
-        root.iconify() #hide the window
         class_id = clsID.get()
         student_id = stuid.get()
-        from classtimewindow import assignvalue
-        assignvalue(class_id,student_id)
-        root.destroy()
+        file_name = student_id+"_"+class_id
         
+        #connect to the Firebase
+        config = {
+                "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+                "authDomain": "edumaster-project.firebaseapp.com",
+                "projectId": "edumaster-project",
+                "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+                "storageBucket": "edumaster-project.appspot.com",
+                "messagingSenderId": "945743272123",
+                "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+                "measurementId": "G-XNK127X4XJ"
+        }
+      
+        firebase = pyrebase.initialize_app(config)
+        database = firebase.database()
+        
+        readdata = database.child("StudentCourse").child(file_name).get().val()
+        
+        if (readdata==None):
+            messagebox.showinfo("Warning","Invalid Class ID or Student ID")
+        else:
+            root.iconify() #hide the window
+            from classtimewindow import assignvalue
+            assignvalue(class_id,student_id)
+            root.destroy()
     
     
 #connect to the database
