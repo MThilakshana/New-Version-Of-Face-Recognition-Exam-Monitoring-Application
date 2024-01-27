@@ -14,7 +14,6 @@ mydb = mysql.connector.connect(
 )
 cursor = mydb.cursor()
 
-
 #check btn function
 def checkBtn():
     if(eid.get()=="Exam ID"):
@@ -82,12 +81,9 @@ def startExambtn():
         #save data
         response = database.child("Exam").child(path).set(savedata)
     
-    
     messagebox.showinfo("Message","Exam Ready to Start!")
     cursor.close()
     root.destroy()
-    
-      
 
 root=Tk()
 root.title('Start Lecture - LearnMaster 1.0')

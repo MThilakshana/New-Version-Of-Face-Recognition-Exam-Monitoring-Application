@@ -3,6 +3,12 @@ from tkinter import ttk
 from tkcalendar import Calendar
 import mysql.connector
 from tkinter import messagebox
+import pyrebase
+
+#compair images
+def compairImages():
+    path = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/"
+    
 
 #connect to the database
 mydb = mysql.connector.connect(
@@ -14,7 +20,37 @@ mydb = mysql.connector.connect(
 cursor = mydb.cursor()
 
 def joinexambtn():
-    if()
+    if(exmid.get=="Exam ID" or stuid.get()=="Student ID"):
+        messagebox.showinfo("Warning","All field required!")
+    else:
+        exam_id = exmid.get()
+        student_id = stuid.get()
+        file_name = exam_id+"_"+student_id
+        
+        #connect to the Firebase
+        config = {
+                "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+                "authDomain": "edumaster-project.firebaseapp.com",
+                "projectId": "edumaster-project",
+                "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+                "storageBucket": "edumaster-project.appspot.com",
+                "messagingSenderId": "945743272123",
+                "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+                "measurementId": "G-XNK127X4XJ"
+        }
+        firebase = pyrebase.initialize_app(config)
+        database = firebase.database()
+        
+        readdata = database.child("Exam").child(file_name).get().val()
+        
+        if(readdata==None):
+            messagebox.showinfo("Warning","Invalid Exam ID or Student ID")
+        else:
+            root.iconify() #minimize tab
+            from examtimewindow import assignvalue
+            assignvalue(exam_id,student_id)
+            root.destroy()
+        
 
 root=Tk()
 root.title('Join To Exams - LearnMaster 1.0')
@@ -71,7 +107,7 @@ Frame(frame,
 def on_leave(e):
     id = stuid.get()
     if id=='':
-        stuid.insert(0,'Subject ID')
+        stuid.insert(0,'Student ID')
         
 def on_enter(e):
     stuid.delete(0,'end')
@@ -83,7 +119,7 @@ stuid = Entry(frame,
              bg='White',
              font=('Microsoft YaHei UI Light',11))
 stuid.place(x=30,y=145)
-stuid.insert(0,'Subject ID')
+stuid.insert(0,'Student ID')
 stuid.bind('<FocusIn>',on_enter)
 stuid.bind('<FocusOut>', on_leave)
 
@@ -101,12 +137,15 @@ Button(frame,
        bg="#57a1f8",
        fg='white',
        border=0,
-       cursor='hand2').place(x=45,y=200)
+       cursor='hand2',
+       command=joinexambtn).place(x=45,y=200)
 
 Label(frame,
       text='After join the class this application will capture image\nusing your web camera.',
       bg='white',
       fg='black',
       font=('Microsoft YaHei UI Light',9)).place(x=0,y=240)
+
+compairImages()
 
 root.mainloop()

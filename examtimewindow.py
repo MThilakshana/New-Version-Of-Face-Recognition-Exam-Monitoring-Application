@@ -11,15 +11,14 @@ mydb = mysql.connector.connect(
     password="",
     database="learnmaster"
 )
-
 cursor = mydb.cursor()
 
 #function for capture images from web cam
 def captureImage():
-    sql = "SELECT COUNT(*) FROM classdatainstudentview"
+    sql = "SELECT COUNT(*) FROM examdatainstudentview"
     cursor.execute(sql)
     imagecount = int(cursor.fetchone()[0]) + 1
-    imagepath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/"
+    imagepath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/ExamTime/"
     
     #capture image
     cam = cv2.VideoCapture(0)
@@ -45,7 +44,7 @@ def endexambutton(exam_id,student_id,root):
     current_time_string = current_time.strftime('%H:%M:%S')
     
     record = (exm_id,stu_id,current_date_string,current_time_string)
-    sql = "INSERT INTO classdatainstudentview VALUES(%s,%s,%s,%s)"
+    sql = "INSERT INTO examdatainstudentview VALUES(%s,%s,%s,%s)"
 
     cursor.execute(sql,record)
     mydb.commit()
