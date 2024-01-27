@@ -31,16 +31,31 @@ def checkBtn():
             examnameEntry.insert(0,data[0])
             timeEntry.insert(0,data[1])
             dateEntry.insert(0,data[2])
-            sidentry.insert(0,data[3])
+            subjectID = data[3]
+            record1 = (subjectID,)
+            sql1 = "SELECT SID FROM studentcourse WHERE CID=%s"
+            cursor.execute(sql1,record1)
+            slist = cursor.fetchall()
+            stcount = len(slist)
+            noofstudents.insert(0,stcount)
 
     
 #start exam button 
 def startExambtn():
     exm_id = eid.get()
     exm_name = examnameEntry.get()
-    exm_subject = sidentry.get()
     exm_date = str(dateEntry.get())
     exm_time = timeEntry.get()
+    sql = "SELECT SID FROM examdetails WHERE EID=%s"
+    record = (exm_id,)
+    
+    cursor.execute(sql,record)
+    sid = str(cursor.fetchone()[0])
+    sql = "SELECT students.Name, students.SID, students.Email FROM students JOIN studentcourse ON students.SID = studentcourse.SID WHERE studentcourse.CID = %s"
+    record = (sid,)
+    
+    cursor.execute(sql,record)
+    data = cursor.fetchall()
     
     
     #connect to the Firebase
@@ -58,11 +73,15 @@ def startExambtn():
     firebase = pyrebase.initialize_app(config)
     database = firebase.database()
     
-    savedata = {"Exam ID":exm_id,"Exam Name":exm_name,"Subject":exm_subject,"Date":exm_date,"Time":exm_time}
+    for row in data:
+        st_name = row[0]
+        st_id = row[1]
+        st_email = row[2]
+        savedata = {"Exam ID":exm_id,"Exam Name":exm_name,"Subject":sid,"Date":exm_date,"Time":exm_time,"Student Name":st_name,"Student ID":st_id,"Student Email":st_email}
+        path = exm_id+"_"+st_id
+        #save data
+        response = database.child("Exam").child(path).set(savedata)
     
-    path = exm_id+"_"+exm_subject
-    #save data
-    response = database.child("Exam").child(path).set(savedata)
     
     messagebox.showinfo("Message","Exam Ready to Start!")
     cursor.close()
@@ -146,18 +165,18 @@ Frame(root,
 
 #student id
 subidlb = Label(root,
-                  text="Subject ID",
+                  text="No of Students",
                   font=('Microsoft YaHei UI Light',11),
                   bg="white",
                   fg='black').place(x=25,y=215)
 
-sidentry = Entry(root,
+noofstudents = Entry(root,
                     width=30,
                     fg='Black',
                     border=0,
                     bg='White',
                     font=('Microsoft YaHei UI Light',11))
-sidentry.place(x=150,y=215)
+noofstudents.place(x=150,y=215)
 
 Frame(root,
       width=260,
@@ -203,9 +222,6 @@ Frame(root,
      width=260,
       height=2,
       bg='black').place(x=145,y=385)
-
-
-
 
 #start button
 startbtn = Button(root,
