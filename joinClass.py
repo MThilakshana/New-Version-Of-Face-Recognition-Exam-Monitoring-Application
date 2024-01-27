@@ -1,13 +1,27 @@
 import subprocess
 from tkinter import *
 import mysql.connector
+from tkinter import messagebox
 
 
     
 def joinclassbtn():
-    from classtimewindow import assignvalue
-    assignvalue(clsID.get(),stuid.get())
-
+    if(clsID.get=="Class ID" or stuid.get()=="Student ID"):
+        messagebox.showinfo("Warning","All field required")
+    else:
+        
+        
+        
+        
+        root.iconify() #hide the window
+        class_id = clsID.get()
+        student_id = stuid.get()
+        from classtimewindow import assignvalue
+        assignvalue(class_id,student_id)
+        root.destroy()
+        
+    
+    
 #connect to the database
 mydb = mysql.connector.connect(
     host="localhost",

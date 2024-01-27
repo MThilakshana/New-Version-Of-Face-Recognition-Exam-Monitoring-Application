@@ -5,18 +5,30 @@ def endclassbutton():
     x = 0
 
 def assignvalue(cid,sid):
-    print(cid," ",sid)
+    class_id = cid
+    student_id = sid
+    
     root=Tk()
     root.title('End Class - LearnMaster 1.0')
-    root.geometry('300x300+300+200')
+    root.geometry('300x180+300+200')
     root.configure(bg="#fff")
     root.resizable(False,False)
 
-    img = PhotoImage(file='C:/Users/DELL/Desktop/Python/Project parts/final Project/Images/logosmall.gif')
+    cidText = "Class ID - "+class_id
+    sidText = "Student ID - "+student_id
+    
     Label(root,
-        image=img,
-        bg="white").pack(fill=X,padx=20,pady=20)
-
+        text=cidText,
+        font=('Microsoft YaHei UI Light',12, 'bold'),
+        bg="white",
+        fg='black').pack(fill=X,pady=20)
+    
+    Label(root,
+        text=sidText,
+        font=('Microsoft YaHei UI Light',12, 'bold'),
+        bg="white",
+        fg='black').pack(fill=X)
+    
     #add button
     endbtn = Button(root,
                     width=30,
