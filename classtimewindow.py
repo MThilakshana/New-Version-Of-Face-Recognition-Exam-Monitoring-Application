@@ -2,6 +2,9 @@ from tkinter import *
 import mysql.connector
 import cv2
 from tkinter import messagebox
+from datetime import datetime
+
+imagefilepath = ""
 
 #connect to the database
 mydb = mysql.connector.connect(
@@ -31,9 +34,27 @@ def captureImage():
         cam.release()
         cv2.destroyAllWindows()
 
-def endclassbutton():
-    x = 0
+def endclassbutton(class_id,student_id,root):
+    cls_id = class_id
+    stu_id = student_id
+    
+    #get current date
+    current_datetime = datetime.now()
+    current_date_string = current_datetime.strftime('%Y-%m-%d')
+    
+    #get current time
+    current_time = datetime.now().time()
+    current_time_string = current_time.strftime('%H:%M:%S')
+    
+    record = (cls_id,stu_id,current_date_string,current_time_string)
+    sql = "INSERT INTO classdatainstudentview VALUES(%s,%s,%s,%s)"
 
+    cursor.execute(sql,record)
+    mydb.commit()
+    cursor.close()
+    messagebox.showinfo("Message","Data Saved!")
+    root.destroy()
+    
 def assignvalue(cid,sid):
     class_id = cid
     student_id = sid
@@ -70,7 +91,7 @@ def assignvalue(cid,sid):
                     fg='white',
                     border=0,
                     cursor='hand2',
-                    command=endclassbutton)
+                    command=lambda: endclassbutton(class_id,student_id,root))
     endbtn.pack(fill=X,pady=20,padx=40)
 
     root.mainloop()
