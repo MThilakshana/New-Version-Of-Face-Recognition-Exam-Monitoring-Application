@@ -59,20 +59,29 @@ def captureImage():
     cursor.execute(sql)
     imagecount = int(cursor.fetchone()[0]) + 1
     imagepath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/ExamTime/"
-    #capture image
+    
     cam = cv2.VideoCapture(0)
+    cv2.namedWindow("Image Capture")
     
     while True:
-        ret, frame= cam.read()
+        ret, frame = cam.read()
         if not ret:
-            messagebox.showinfo("Warning","Image capturing Error!")
-        else:
-            imagename = "{}MyImage{}.png".format(imagepath,str(imagecount))
-            cv2.imwrite(imagename,frame)
-            time.sleep(5)
-            cam.release()
-            cv2.destroyAllWindows()
-            examimagepath = imagename
+            messagebox.showinfo("Warning","Image Capture Error")
+            break
+        
+        cv2.imshow("LearnMaster - 1.0",frame)
+        k = cv2.waitKey(1)
+        if k%256 == 27:
+            print("closing...")
+            break
+        if k%256 == 32:
+            img_name = "{}MyImage{}.png".format(imagepath,imagecount)
+            cv2.imwrite(img_name,frame)
+            print("Image Captured")
+            k = 256 + 27
+        
+    cam.release()
+    cv2.destroyAllWindows()
         
 def endexambutton(exam_id,student_id,root):
     exm_id = exam_id
