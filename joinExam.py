@@ -5,11 +5,6 @@ import mysql.connector
 from tkinter import messagebox
 import pyrebase
 
-#compair images
-def compairImages():
-    path = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/"
-    
-
 #connect to the database
 mydb = mysql.connector.connect(
     host="localhost",
@@ -145,7 +140,5 @@ Label(frame,
       bg='white',
       fg='black',
       font=('Microsoft YaHei UI Light',9)).place(x=0,y=240)
-
-compairImages()
 
 root.mainloop()

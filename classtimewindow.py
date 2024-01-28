@@ -3,6 +3,7 @@ import mysql.connector
 import cv2
 from tkinter import messagebox
 from datetime import datetime
+import time
 
 #connect to the database
 mydb = mysql.connector.connect(
@@ -11,7 +12,6 @@ mydb = mysql.connector.connect(
     password="",
     database="learnmaster"
 )
-
 cursor = mydb.cursor()
 
 #function for capture images from web cam
@@ -28,9 +28,12 @@ def captureImage():
         messagebox.showinfo("Warning","Image capturing Error!")
     else:
         imagename = "{}MyImage{}.png".format(imagepath,str(imagecount))
+        cv2.imshow("LearnMaster - 1.0",frame)
+        time.sleep(5)
         cv2.imwrite(imagename,frame)
-        cam.release()
-        cv2.destroyAllWindows()
+        
+    cam.release()
+    cv2.destroyAllWindows()
 
 def endclassbutton(class_id,student_id,root):
     cls_id = class_id
@@ -51,7 +54,6 @@ def endclassbutton(class_id,student_id,root):
     mydb.commit()
     cursor.close()
     messagebox.showinfo("Message","Data Saved!")
-    root.destroy()
     
 def assignvalue(cid,sid):
     class_id = cid

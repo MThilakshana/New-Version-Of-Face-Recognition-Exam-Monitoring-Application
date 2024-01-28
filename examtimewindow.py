@@ -3,6 +3,46 @@ import mysql.connector
 import cv2
 from tkinter import messagebox
 from datetime import datetime
+import face_recognition
+import time
+
+examimagepath = ""
+
+#find face function
+def find_face(img_path):
+    image = cv2.imread(img_path)
+    print("point 4 ########################################")
+    face_enc = face_recognition.face_encodings(image)
+    print("point 5 ########################################")
+    return face_enc[0]
+    
+#compair images
+def compairImages():
+    imageCount = 1
+    
+    sql = "SELECT COUNT(*) FROM classdatainstudentview"
+    cursor.execute(sql)
+    number_of_images = cursor.fetchone()[0]
+    print("point 1 ########################################")
+    
+    while(imageCount<=number_of_images):
+        firstpath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/"
+        firstimagename = "{}MyImage{}.png".format(firstpath,str(imageCount))
+        print("point 2 ########################################")
+        secondimagename = examimagepath
+        
+        image1 = find_face(firstimagename)
+        print("point 8 ########################################")
+        image2 = find_face(secondimagename)
+        print("point 3 ########################################")
+        if image1 is not None and image2 is not None:
+            is_same = face_recognition.compare_faces([image1], image2)[0]
+            print("point 6 ########################################")
+            print(f"Is same : {is_same}")
+        else:
+            print("error found")
+        
+        imageCount += 1
 
 #connect to the database
 mydb = mysql.connector.connect(
@@ -19,18 +59,21 @@ def captureImage():
     cursor.execute(sql)
     imagecount = int(cursor.fetchone()[0]) + 1
     imagepath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/ExamTime/"
-    
     #capture image
     cam = cv2.VideoCapture(0)
-    ret, frame= cam.read()
-    if not ret:
-        messagebox.showinfo("Warning","Image capturing Error!")
-    else:
-        imagename = "{}MyImage{}.png".format(imagepath,str(imagecount))
-        cv2.imwrite(imagename,frame)
-        cam.release()
-        cv2.destroyAllWindows()
-
+    
+    while True:
+        ret, frame= cam.read()
+        if not ret:
+            messagebox.showinfo("Warning","Image capturing Error!")
+        else:
+            imagename = "{}MyImage{}.png".format(imagepath,str(imagecount))
+            cv2.imwrite(imagename,frame)
+            time.sleep(5)
+            cam.release()
+            cv2.destroyAllWindows()
+            examimagepath = imagename
+        
 def endexambutton(exam_id,student_id,root):
     exm_id = exam_id
     stu_id = student_id
@@ -90,6 +133,8 @@ def assignvalue(eid,sid):
                     cursor='hand2',
                     command=lambda: endexambutton(exam_id,student_id,root))
     endbtn.pack(fill=X,pady=20,padx=40)
+    
+    compairImages()
 
     root.mainloop()
 

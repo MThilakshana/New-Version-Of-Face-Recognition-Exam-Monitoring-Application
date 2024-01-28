@@ -4,6 +4,13 @@ import mysql.connector
 from tkinter import ttk
 import subprocess
 
+#define startExam button
+def startexamwindow():
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/startExam.py'], check=True)
+      root.destroy()
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/adminWindow.py'], check=True)
+ 
+
 #define exit button
 def exitwin():
     result = messagebox.askyesno("Confirmation","Do you want to exit?")
@@ -223,7 +230,8 @@ startExam = Button(blueframe,
                       cursor="hand2",
                       width=22,
                       font=('Microsoft YaHei UI Light',13,'bold'),
-                      anchor='w')
+                      anchor='w',
+                      command=startexamwindow)
 startExam.place(x=5,y=360)
 
 exit = Button(blueframe,

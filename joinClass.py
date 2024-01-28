@@ -36,7 +36,8 @@ def joinclassbtn():
             root.iconify() #hide the window
             from classtimewindow import assignvalue
             assignvalue(class_id,student_id)
-            root.destroy()
+            
+        root.destroy()
     
     
 #connect to the database
