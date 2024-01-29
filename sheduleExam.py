@@ -44,7 +44,7 @@ def read():
         root.destroy()
 
 root=Tk()
-root.title('Shedule Exam - LearnMaster 1.0')
+root.title('Schedule Exam - LearnMaster 1.0')
 root.geometry('775x400+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
@@ -84,7 +84,7 @@ frame.place(x=450,y=0)
 
 #add heading
 heading = Label(frame,
-                text='Shedule Exam',
+                text='Schedule Exam',
                 fg='#57a1f8',
                 bg='white',
                 font=('Microsoft YaHei UI Light',25,'bold'))

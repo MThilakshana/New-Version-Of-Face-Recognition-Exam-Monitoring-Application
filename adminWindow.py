@@ -5,11 +5,16 @@ from tkinter import ttk
 import subprocess
 
 #define startExam button
+def startclasswindow():
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/startCls.py'], check=True)
+      root.destroy()
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/adminWindow.py'], check=True)
+
+#define startExam button
 def startexamwindow():
       result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/startExam.py'], check=True)
       root.destroy()
       result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/adminWindow.py'], check=True)
- 
 
 #define exit button
 def exitwin():
@@ -147,7 +152,8 @@ startlecture = Button(blueframe,
                       cursor="hand2",
                       width=22,
                       font=('Microsoft YaHei UI Light',13,'bold'),
-                      anchor='w')
+                      anchor='w',
+                      command=startclasswindow)
 startlecture.place(x=5,y=80)
 
 addnewclass = Button(blueframe,
