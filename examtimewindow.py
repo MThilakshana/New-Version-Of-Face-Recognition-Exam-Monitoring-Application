@@ -28,26 +28,32 @@ def compairImages():
     cursor.execute(sql)
     number_of_images = cursor.fetchone()[0]
     
-    firstpath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/"
+    firstpath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/ExamTime/"
     firstimagename = "{}MyImage{}.png".format(firstpath,str(imageCount))
     
-    secondpath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/ExamTime/"
-    secondimagename = "{}MyImage{}.png".format(secondpath,"1")
+    while (imageCount<=number_of_images):
+        secondpath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/"
+        secondimagename = "{}MyImage{}.png".format(secondpath,imageCount)
+        
+        image1 = find_face(firstimagename)
+        image2 = find_face(secondimagename)
     
-    image1 = find_face(firstimagename)
-    image2 = find_face(secondimagename)
+        is_same = face_recognition.compare_faces([image1], image2)[0]
+        print(f"Is same : {is_same}")
+        
+        if is_same:
+            distance = face_recognition.face_distance([image1],image2)
+            distance = round(distance[0]*100)
+            accuracy = 100 - round(distance)
+            print("The images are the same")
+            print(f"Accuracy level: {accuracy}%")
+        else:
+            print("the images are not same")
+            
+        imageCount += 1
     
-    is_same = face_recognition.compare_faces([image1], image2)[0]
-    print(f"Is same : {is_same}")
     
-    if is_same:
-        distance = face_recognition.face_distance([image1],image2)
-        distance = round(distance[0]*100)
-        accuracy = 100 - round(distance)
-        print("The images are the same")
-        print(f"Accuracy level: {accuracy}%")
-    else:
-        print("the images are not same")
+    
 
 #connect to the database
 mydb = mysql.connector.connect(

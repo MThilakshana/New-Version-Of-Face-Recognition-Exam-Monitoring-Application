@@ -44,7 +44,6 @@ def joinexambtn():
             root.iconify() #minimize tab
             from examtimewindow import assignvalue
             assignvalue(exam_id,student_id)
-            root.destroy()
         
 
 root=Tk()
