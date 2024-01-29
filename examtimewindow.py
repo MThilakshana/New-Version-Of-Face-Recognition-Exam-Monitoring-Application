@@ -7,42 +7,47 @@ import face_recognition
 import time
 
 examimagepath = ""
-
-#find face function
-def find_face(img_path):
-    image = cv2.imread(img_path)
-    print("point 4 ########################################")
-    face_enc = face_recognition.face_encodings(image)
-    print("point 5 ########################################")
-    return face_enc[0]
     
 #compair images
 def compairImages():
+    
+    #find face function
+    def find_face(img_path):
+        image = cv2.imread(img_path)
+        face_enc = face_recognition.face_encodings(image)
+        
+        if not face_enc:
+            print("No face")
+            return None
+        
+        return face_enc[0]
+    
     imageCount = 1
     
     sql = "SELECT COUNT(*) FROM classdatainstudentview"
     cursor.execute(sql)
     number_of_images = cursor.fetchone()[0]
-    print("point 1 ########################################")
     
-    while(imageCount<=number_of_images):
-        firstpath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/"
-        firstimagename = "{}MyImage{}.png".format(firstpath,str(imageCount))
-        print("point 2 ########################################")
-        secondimagename = examimagepath
-        
-        image1 = find_face(firstimagename)
-        print("point 8 ########################################")
-        image2 = find_face(secondimagename)
-        print("point 3 ########################################")
-        if image1 is not None and image2 is not None:
-            is_same = face_recognition.compare_faces([image1], image2)[0]
-            print("point 6 ########################################")
-            print(f"Is same : {is_same}")
-        else:
-            print("error found")
-        
-        imageCount += 1
+    firstpath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/"
+    firstimagename = "{}MyImage{}.png".format(firstpath,str(imageCount))
+    
+    secondpath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/ExamTime/"
+    secondimagename = "{}MyImage{}.png".format(secondpath,"1")
+    
+    image1 = find_face(firstimagename)
+    image2 = find_face(secondimagename)
+    
+    is_same = face_recognition.compare_faces([image1], image2)[0]
+    print(f"Is same : {is_same}")
+    
+    if is_same:
+        distance = face_recognition.face_distance([image1],image2)
+        distance = round(distance[0]*100)
+        accuracy = 100 - round(distance)
+        print("The images are the same")
+        print(f"Accuracy level: {accuracy}%")
+    else:
+        print("the images are not same")
 
 #connect to the database
 mydb = mysql.connector.connect(
@@ -59,6 +64,8 @@ def captureImage():
     cursor.execute(sql)
     imagecount = int(cursor.fetchone()[0]) + 1
     imagepath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/ExamTime/"
+    
+    messagebox.showinfo("Important","Press space to enter class\nWhen open the camera otherwise\npress ecs to exit")
     
     cam = cv2.VideoCapture(0)
     cv2.namedWindow("Image Capture")
@@ -78,7 +85,8 @@ def captureImage():
             img_name = "{}MyImage{}.png".format(imagepath,imagecount)
             cv2.imwrite(img_name,frame)
             print("Image Captured")
-            k = 256 + 27
+            print("closing...")
+            break
         
     cam.release()
     cv2.destroyAllWindows()

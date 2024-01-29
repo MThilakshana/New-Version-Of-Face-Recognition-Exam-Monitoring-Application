@@ -21,15 +21,32 @@ def captureImage():
     imagecount = int(cursor.fetchone()[0]) + 1
     imagepath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/"
     
+    messagebox.showinfo("Important","Press space to enter class\nWhen open the camera otherwise\npress ecs to exit")
+    
     #capture image
     cam = cv2.VideoCapture(0)
-    ret, frame= cam.read()
-    if not ret:
-        messagebox.showinfo("Warning","Image capturing Error!")
-    else:
+    cv2.namedWindow("Image Capture")
+    
+    while True:
+        ret, frame = cam.read()
+        if not ret:
+            messagebox.showinfo("Warning","Image capturing Error!")
+            break
+        
+        cv2.imshow("LearnMaster - 1.0",frame)
+        k = cv2.waitKey(1)
+        if k%256 == 27:
+            print("closing...")
+            break
+        if k%256 == 32:
+            img_name = "{}MyImage{}.png".format(imagepath,imagecount)
+            cv2.imwrite(img_name,frame)
+            print("Image Captured")
+            print("closing...")
+            break
+        
         imagename = "{}MyImage{}.png".format(imagepath,str(imagecount))
         cv2.imshow("LearnMaster - 1.0",frame)
-        time.sleep(5)
         cv2.imwrite(imagename,frame)
         
     cam.release()
