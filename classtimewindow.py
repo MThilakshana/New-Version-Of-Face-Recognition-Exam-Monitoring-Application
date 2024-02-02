@@ -19,7 +19,7 @@ def captureImage():
     sql = "SELECT COUNT(*) FROM classdatainstudentview"
     cursor.execute(sql)
     imagecount = int(cursor.fetchone()[0]) + 1
-    imagepath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/"
+    imagepath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/ExamTime/"
     
     messagebox.showinfo("Important","Press space to enter class\nWhen open the camera otherwise\npress ecs to exit")
     

@@ -1,3 +1,4 @@
+import subprocess
 from tkinter import *
 from tkinter import ttk
 from tkcalendar import Calendar
@@ -42,9 +43,11 @@ def joinexambtn():
             messagebox.showinfo("Warning","Invalid Exam ID or Student ID")
         else:
             root.iconify() #minimize tab
-            from examtimewindow import assignvalue
-            assignvalue(exam_id,student_id)
-        
+            #from examtimewindow import assignvalue
+            #assignvalue(exam_id,student_id)
+            messagebox.showinfo("Message from TEST mode","Press ESC button after finish the exam!")
+            result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/realTimeImage.py'], check=True)
+      
 
 root=Tk()
 root.title('Join To Exams - LearnMaster 1.0')
