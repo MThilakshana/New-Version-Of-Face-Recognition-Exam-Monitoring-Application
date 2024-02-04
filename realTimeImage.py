@@ -92,6 +92,49 @@ def capture_and_process_frames(known_faces):
     print(f"Total Unauthorized Screen Time: {total_unauthorized_time} seconds")
     print(f"Total Screen Time Camera Turned On: {total_screen_time} seconds")
 
+    root=Tk()
+    root.title('End Exam Report - LearnMaster 1.0')
+    root.geometry('775x300+300+200')
+    root.configure(bg="#fff")
+    root.resizable(False,False)
+
+    img = PhotoImage(file='C:/Users/DELL/Desktop/Python/Project parts/final Project/Images/classSmall.png')
+    Label(root,
+        image=img,
+        bg="white").place(x=0,y=0)
+
+    frame_win = Frame(root,
+                width=300,
+                height=300,
+                bg='red')
+    frame_win.place(x=450,y=0)
+
+    #add heading
+    heading = Label(frame_win,
+                    text='End Exam Report',
+                    fg='#57a1f8',
+                    bg='white',
+                    font=('Microsoft YaHei UI Light',20,'bold'))
+    heading.place(x=30,y=0)
+    
+    Label(frame_win,
+      text="Student ID",
+      font=('Microsoft YaHei UI Light',11,),
+      fg='black').place(x=0,y=50)
+
+    Label(frame_win,
+        text="Exam ID",
+        font=('Microsoft YaHei UI Light',11,),
+        fg='black').place(x=0,y=100)
+
+    Label(frame_win,
+        text="Authorized Time",
+        font=('Microsoft YaHei UI Light',11,),
+        fg='black').place(x=0,y=150)
+        
+
+    root.mainloop()
+    
 # Specify the folder path where candidate images are stored
 candidates_folder = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/ExamTime"
 
