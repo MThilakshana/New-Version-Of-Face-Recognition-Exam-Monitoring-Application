@@ -5,6 +5,7 @@ from tkcalendar import Calendar
 import mysql.connector
 from tkinter import messagebox
 import pyrebase
+import os
 
 #connect to the database
 mydb = mysql.connector.connect(
@@ -43,16 +44,12 @@ def joinexambtn():
             messagebox.showinfo("Warning","Invalid Exam ID or Student ID")
         else:
             root.iconify() #minimize tab
-            #from examtimewindow import assignvalue
-            #assignvalue(exam_id,student_id)
             messagebox.showinfo("Message from TEST mode","Press ESC button after finish the exam!")
-            #pass sid and eid to save
-            from realTimeImage import get_data
-            get_data(exam_id,student_id)
+            
             try:
                 result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/realTimeImage.py'], check=True)
-                print(result.stdout.decode())
-                print(result.stderr.decode())
+                root.destroy()
+                
             except subprocess.CalledProcessError as e:
                 print("error fount - ", e)
 

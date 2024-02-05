@@ -100,68 +100,82 @@ def capture_and_process_frames(known_faces):
     print(f"Total Unauthorized Screen Time: {total_unauthorized_time} seconds")
     print(f"Total Screen Time Camera Turned On: {total_screen_time} seconds")
 
+    #convert string to float
+    float_authorized_time = float(total_authorized_time)
+    float_unauthorized_time = float(total_unauthorized_time)
+    float_screen_time = float(total_screen_time)
+    
+    #make values as rounded
+    float_authorized_time = round(float_authorized_time , 2)
+    float_unauthorized_time = round(float_unauthorized_time, 2)
+    float_screen_time = round(float_screen_time, 2)
+    
+    #build last window
     root=Tk()
     root.title('End Exam Report - LearnMaster 1.0')
-    root.geometry('775x300+300+200')
+    root.geometry('310x300+300+200')
     root.configure(bg="#fff")
     root.resizable(False,False)
-
-    img = PhotoImage(file='C:/Users/DELL/Desktop/Python/Project parts/final Project/Images/classSmall.png')
-    Label(root,
-        image=img,
-        bg="white").place(x=0,y=0)
 
     frame_win = Frame(root,
                 width=300,
                 height=300,
-                bg='red')
-    frame_win.place(x=450,y=0)
+                bg='white')
+    frame_win.place(x=10,y=0)
 
     #add heading
     heading = Label(frame_win,
                     text='End Exam Report',
                     fg='#57a1f8',
                     bg='white',
-                    font=('Microsoft YaHei UI Light',20,'bold'))
-    heading.place(x=30,y=0)
+                    font=('Microsoft YaHei UI Light',17,'bold'))
+    heading.place(x=40,y=0)
     
     Label(frame_win,
       text="Student ID",
       font=('Microsoft YaHei UI Light',11,),
+      bg='white',
       fg='black').place(x=0,y=50)
 
     Label(frame_win,
         text="Exam ID",
+        bg='white',
         font=('Microsoft YaHei UI Light',11,),
         fg='black').place(x=0,y=100)
 
     Label(frame_win,
         text="Authorized Time",
+        bg='white',
         font=('Microsoft YaHei UI Light',11,),
         fg='black').place(x=0,y=150)
     
     Label(frame_win,
         text="Full Screen Time",
+        bg='white',
         font=('Microsoft YaHei UI Light',11,),
         fg='black').place(x=0,y=200)
     
     stuEntry = Entry(frame_win,
                     font=('Microsoft YaHei UI Light',11,),
+                    bg='white',
                     fg='black')
     stuEntry.place(x=125,y=50)
 
     exmEntry = Entry(frame_win,
                     font=('Microsoft YaHei UI Light',11,),
+                    bg='white',
                     fg='black')
     exmEntry.place(x=125,y=100)
 
     autEntry = Entry(frame_win,
                     font=('Microsoft YaHei UI Light',11,),
+                    bg='white',
                     fg='black')
     autEntry.place(x=125,y=150)
 
     sctEntry = Entry(frame_win,
                     font=('Microsoft YaHei UI Light',11,),
+                    bg='white',
                     fg='black')
     sctEntry.place(x=125,y=200)
 
@@ -175,10 +189,8 @@ def capture_and_process_frames(known_faces):
         cursor='hand2',
         command=root.destroy).place(x=45,y=250)
     
-    stuEntry.insert(0,"Hello")
-    exmEntry.insert(0,eidVal)
-    autEntry.insert(0,total_authorized_time)
-    sctEntry.insert(0,total_screen_time)
+    autEntry.insert(0,str(float_authorized_time) + " Sec")
+    sctEntry.insert(0,str(float_screen_time) + " Sec")
 
     root.mainloop()
     
