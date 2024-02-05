@@ -46,8 +46,15 @@ def joinexambtn():
             #from examtimewindow import assignvalue
             #assignvalue(exam_id,student_id)
             messagebox.showinfo("Message from TEST mode","Press ESC button after finish the exam!")
-            result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/realTimeImage.py'], check=True)
-      
+            #pass sid and eid to save
+            from realTimeImage import get_data
+            get_data(exam_id,student_id)
+            try:
+                result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/realTimeImage.py'], check=True)
+                print(result.stdout.decode())
+                print(result.stderr.decode())
+            except subprocess.CalledProcessError as e:
+                print("error fount - ", e)
 
 root=Tk()
 root.title('Join To Exams - LearnMaster 1.0')

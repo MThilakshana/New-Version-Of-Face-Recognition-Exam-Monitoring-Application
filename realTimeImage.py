@@ -4,6 +4,14 @@ import face_recognition
 import os
 import time
 
+sidVal = ""
+eidVal = ""
+
+
+def get_data(exam_id, student_id):
+    print(f"Student ID: {student_id}")
+    print(f"Exam ID: {exam_id}")
+
 # Load known faces from the specified folder
 def load_known_faces(folder_path):
     known_faces = []
@@ -131,7 +139,46 @@ def capture_and_process_frames(known_faces):
         text="Authorized Time",
         font=('Microsoft YaHei UI Light',11,),
         fg='black').place(x=0,y=150)
-        
+    
+    Label(frame_win,
+        text="Full Screen Time",
+        font=('Microsoft YaHei UI Light',11,),
+        fg='black').place(x=0,y=200)
+    
+    stuEntry = Entry(frame_win,
+                    font=('Microsoft YaHei UI Light',11,),
+                    fg='black')
+    stuEntry.place(x=125,y=50)
+
+    exmEntry = Entry(frame_win,
+                    font=('Microsoft YaHei UI Light',11,),
+                    fg='black')
+    exmEntry.place(x=125,y=100)
+
+    autEntry = Entry(frame_win,
+                    font=('Microsoft YaHei UI Light',11,),
+                    fg='black')
+    autEntry.place(x=125,y=150)
+
+    sctEntry = Entry(frame_win,
+                    font=('Microsoft YaHei UI Light',11,),
+                    fg='black')
+    sctEntry.place(x=125,y=200)
+
+    Button(frame_win,
+        width=30,
+        pady=7,
+        text='End Exam',
+        bg="#57a1f8",
+        fg='white',
+        border=0,
+        cursor='hand2',
+        command=root.destroy).place(x=45,y=250)
+    
+    stuEntry.insert(0,"Hello")
+    exmEntry.insert(0,eidVal)
+    autEntry.insert(0,total_authorized_time)
+    sctEntry.insert(0,total_screen_time)
 
     root.mainloop()
     
