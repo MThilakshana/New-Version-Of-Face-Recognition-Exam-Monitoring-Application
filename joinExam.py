@@ -5,7 +5,6 @@ from tkcalendar import Calendar
 import mysql.connector
 from tkinter import messagebox
 import pyrebase
-import os
 
 #connect to the database
 mydb = mysql.connector.connect(

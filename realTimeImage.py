@@ -3,14 +3,8 @@ import cv2
 import face_recognition
 import os
 import time
-
-sidVal = ""
-eidVal = ""
-
-
-def get_data(exam_id, student_id):
-    print(f"Student ID: {student_id}")
-    print(f"Exam ID: {exam_id}")
+import pyrebase
+from tkinter import messagebox
 
 # Load known faces from the specified folder
 def load_known_faces(folder_path):
@@ -39,6 +33,33 @@ def identify_candidate(frame, known_faces):
 
 # Capture and process frames
 def capture_and_process_frames(known_faces):
+    
+    #end exam button
+    def endExam():
+        config = {
+                    "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+                    "authDomain": "edumaster-project.firebaseapp.com",
+                    "projectId": "edumaster-project",
+                    "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+                    "storageBucket": "edumaster-project.appspot.com",
+                    "messagingSenderId": "945743272123",
+                    "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+                    "measurementId": "G-XNK127X4XJ"
+            }
+        
+        firebase = pyrebase.initialize_app(config)
+        database = firebase.database()
+        
+        if(stuEntry.get()==None or exmEntry.get()==None or autEntry.get()==None or sctEntry.get()==None):
+            messagebox.showinfo("Warning","All Fields Required!")
+        else:
+            path = str(exmEntry.get()+"_"+stuEntry.get())
+            data = {"Exam ID":exmEntry.get(),"Student ID":stuEntry.get(),"Total Authorized time":float_authorized_time, "Total Unauthorized Time":float_unauthorized_time,"Total Screen Time":float_screen_time}
+            database.child("Finished_Exam").child(path).set(data)
+            root.destroy()
+
+    
+    
     video_capture = cv2.VideoCapture(0)
 
     total_authorized_time = 0
@@ -187,12 +208,13 @@ def capture_and_process_frames(known_faces):
         fg='white',
         border=0,
         cursor='hand2',
-        command=root.destroy).place(x=45,y=250)
+        command=endExam).place(x=45,y=250)
     
     autEntry.insert(0,str(float_authorized_time) + " Sec")
     sctEntry.insert(0,str(float_screen_time) + " Sec")
-
+    
     root.mainloop()
+    
     
 # Specify the folder path where candidate images are stored
 candidates_folder = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/ExamTime"
