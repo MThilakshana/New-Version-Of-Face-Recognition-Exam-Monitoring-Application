@@ -58,8 +58,6 @@ def capture_and_process_frames(known_faces):
             database.child("Finished_Exam").child(path).set(data)
             root.destroy()
 
-    
-    
     video_capture = cv2.VideoCapture(0)
 
     total_authorized_time = 0
@@ -95,6 +93,7 @@ def capture_and_process_frames(known_faces):
                 elif time.time() - unauthorized_start_time > 8 and not unauthorized_printed:
                     print(f"Authorized person not detected at {time.strftime('%Y-%m-%d %H:%M:%S')}!")
                     unauthorized_printed = True
+                    
             else:
                 # Set unauthorized start time when a person is first detected
                 unauthorized_start_time = time.time()
