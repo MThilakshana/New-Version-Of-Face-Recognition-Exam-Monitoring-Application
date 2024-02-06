@@ -240,6 +240,17 @@ startExam = Button(blueframe,
                       command=startexamwindow)
 startExam.place(x=5,y=360)
 
+seeexamdetails = Button(blueframe,
+                      text="Show Exam Details",
+                      border=0,
+                      bg="#57a1f8",
+                      fg='white',
+                      cursor="hand2",
+                      width=22,
+                      font=('Microsoft YaHei UI Light',13,'bold'),
+                      anchor='w')
+seeexamdetails.place(x=5,y=400)
+
 exit = Button(blueframe,
                       text="Exit",
                       border=0,
