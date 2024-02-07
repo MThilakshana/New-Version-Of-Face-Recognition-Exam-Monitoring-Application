@@ -48,6 +48,9 @@ def joinexambtn():
         if(readdata==None):
             messagebox.showinfo("Warning","Invalid Exam ID or Student ID")
         else:
+            path = str(exam_id+"_"+student_id)
+            savedata = {"StudentID":student_id,"ExamID":exam_id}
+            database.child("Finished_Exam").child(path).set(savedata)
             root.iconify() #minimize tab
             messagebox.showinfo("Message from TEST mode","Press ESC button after finish the exam!")
             

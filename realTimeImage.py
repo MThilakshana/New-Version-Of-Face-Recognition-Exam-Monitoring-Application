@@ -54,9 +54,15 @@ def capture_and_process_frames(known_faces):
             messagebox.showinfo("Warning","All Fields Required!")
         else:
             path = str(exmEntry.get()+"_"+stuEntry.get())
-            data = {"Exam ID":exmEntry.get(),"Student ID":stuEntry.get(),"Total Authorized time":float_authorized_time, "Total Unauthorized Time":float_unauthorized_time,"Total Screen Time":float_screen_time}
-            database.child("Finished_Exam").child(path).set(data)
-            root.destroy()
+            
+            #check branch correct or not
+            result = database.child("Finished_Exam").child(path).get().val()
+            if result.get('ExamID')==exmEntry.get() or result.get('StudentID')==stuEntry.get():
+                data = {"ExamID":exmEntry.get(),"StudentID":stuEntry.get(),"Total Authorized time":float_authorized_time, "Total Unauthorized Time":float_unauthorized_time,"Total Screen Time":float_screen_time}
+                database.child("Finished_Exam").child(path).set(data)
+                root.destroy()
+            else:
+                messagebox.showinfo("Warning","Invalid Class ID or Student ID")
 
     video_capture = cv2.VideoCapture(0)
 
