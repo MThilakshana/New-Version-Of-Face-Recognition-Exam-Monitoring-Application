@@ -6,6 +6,7 @@ import mysql.connector
 from tkinter import messagebox
 import pyrebase
 
+
 #connect to the database
 mydb = mysql.connector.connect(
     host="localhost",
@@ -14,6 +15,11 @@ mydb = mysql.connector.connect(
     database="learnmaster"
 )
 cursor = mydb.cursor()
+
+def pass_stuid_examid():
+    examid = exmid.get()
+    studid = stuid.get()
+    return examid,studid
 
 def joinexambtn():
     if(exmid.get=="Exam ID" or stuid.get()=="Student ID"):

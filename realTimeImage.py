@@ -50,7 +50,7 @@ def capture_and_process_frames(known_faces):
         firebase = pyrebase.initialize_app(config)
         database = firebase.database()
         
-        if(stuEntry.get()==None or exmEntry.get()==None or autEntry.get()==None or sctEntry.get()==None):
+        if(stuEntry.get()=="" or exmEntry.get()=="" or autEntry.get()=="" or sctEntry.get()==""):
             messagebox.showinfo("Warning","All Fields Required!")
         else:
             path = str(exmEntry.get()+"_"+stuEntry.get())
@@ -214,7 +214,7 @@ def capture_and_process_frames(known_faces):
     
     root.mainloop()
     
-    
+
 # Specify the folder path where candidate images are stored
 candidates_folder = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/ExamTime"
 
