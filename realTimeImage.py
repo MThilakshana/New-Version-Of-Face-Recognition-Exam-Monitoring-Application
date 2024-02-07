@@ -6,6 +6,8 @@ import time
 import pyrebase
 from tkinter import messagebox
 
+authorizedNotDetect = []
+
 # Load known faces from the specified folder
 def load_known_faces(folder_path):
     known_faces = []
@@ -60,6 +62,18 @@ def capture_and_process_frames(known_faces):
             if result.get('ExamID')==exmEntry.get() or result.get('StudentID')==stuEntry.get():
                 data = {"ExamID":exmEntry.get(),"StudentID":stuEntry.get(),"Total Authorized time":float_authorized_time, "Total Unauthorized Time":float_unauthorized_time,"Total Screen Time":float_screen_time}
                 database.child("Finished_Exam").child(path).set(data)
+                print(len(authorizedNotDetect))
+                
+                datafile = {"Exam ID":exmEntry.get(),"Student ID":stuEntry.get(),"Date":time.strftime('%y-%m-%d')}
+                database.child("AuthorizedNotDetected").child(path).set(datafile)
+                
+                rowcount = 1
+                for i in authorizedNotDetect:
+                    dataString = "Autorized preson not detect time "+str(rowcount)
+                    autVal = authorizedNotDetect[rowcount-1]
+                    autData = {dataString:autVal}
+                    database.child("AuthorizedNotDetected").child(path).update(autData)
+                    rowcount += 1
                 root.destroy()
             else:
                 messagebox.showinfo("Warning","Invalid Class ID or Student ID")
@@ -99,7 +113,7 @@ def capture_and_process_frames(known_faces):
                 elif time.time() - unauthorized_start_time > 8 and not unauthorized_printed:
                     print(f"Authorized person not detected at {time.strftime('%Y-%m-%d %H:%M:%S')}!")
                     unauthorized_printed = True
-                    
+                    authorizedNotDetect.append(f"{time.strftime('%H:%M:%S')}")
             else:
                 # Set unauthorized start time when a person is first detected
                 unauthorized_start_time = time.time()
