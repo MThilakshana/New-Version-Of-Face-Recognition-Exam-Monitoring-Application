@@ -115,5 +115,4 @@ printbtn = Button(framebottom,
                 border=0)
 printbtn.place(x=600,y=20)
 
-
 root.mainloop()
