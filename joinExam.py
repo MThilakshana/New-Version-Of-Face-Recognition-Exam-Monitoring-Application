@@ -28,6 +28,8 @@ def joinexambtn():
         exam_id = exmid.get()
         student_id = stuid.get()
         file_name = exam_id+"_"+student_id
+        exampath = str(exam_id)
+        stupath = str(student_id)
         
         #connect to the Firebase
         config = {
@@ -50,7 +52,7 @@ def joinexambtn():
         else:
             path = str(exam_id+"_"+student_id)
             savedata = {"StudentID":student_id,"ExamID":exam_id}
-            database.child("Finished_Exam").child(path).set(savedata)
+            database.child("Finished_Exam").child(exampath).child(stupath).set(savedata)
             root.iconify() #minimize tab
             messagebox.showinfo("Message from TEST mode","Press ESC button after finish the exam!")
             

@@ -55,24 +55,25 @@ def capture_and_process_frames(known_faces):
         if(stuEntry.get()=="" or exmEntry.get()=="" or autEntry.get()=="" or sctEntry.get()==""):
             messagebox.showinfo("Warning","All Fields Required!")
         else:
-            path = str(exmEntry.get()+"_"+stuEntry.get())
+            exampath = str(exmEntry.get())
+            stupath = str(stuEntry.get())
             
             #check branch correct or not
-            result = database.child("Finished_Exam").child(path).get().val()
+            result = database.child("Finished_Exam").child(exampath).child(stupath).get().val()
             if result.get('ExamID')==exmEntry.get() or result.get('StudentID')==stuEntry.get():
                 data = {"ExamID":exmEntry.get(),"StudentID":stuEntry.get(),"Total Authorized time":float_authorized_time, "Total Unauthorized Time":float_unauthorized_time,"Total Screen Time":float_screen_time}
-                database.child("Finished_Exam").child(path).set(data)
+                database.child("Finished_Exam").child(exampath).child(stupath).set(data)
                 print(len(authorizedNotDetect))
                 
                 datafile = {"Exam ID":exmEntry.get(),"Student ID":stuEntry.get(),"Date":time.strftime('%y-%m-%d')}
-                database.child("AuthorizedNotDetected").child(path).set(datafile)
+                database.child("AuthorizedNotDetected").child(exampath).child(stupath).set(datafile)
                 
                 rowcount = 1
                 for i in authorizedNotDetect:
                     dataString = "Autorized preson not detect time "+str(rowcount)
                     autVal = authorizedNotDetect[rowcount-1]
                     autData = {dataString:autVal}
-                    database.child("AuthorizedNotDetected").child(path).update(autData)
+                    database.child("AuthorizedNotDetected").child(exampath).child(stupath).update(autData)
                     rowcount += 1
                 root.destroy()
             else:
