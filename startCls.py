@@ -38,6 +38,9 @@ def checkBtn():
             
             stucount.insert(0,stcount)
             
+#send email
+def sendemail(st_email):
+      print('email sent')
             
             
 #add function to start button
@@ -80,6 +83,8 @@ def startClass():
             path = st_id+"_"+class_id
             #save data
             response = database.child("StudentCourse").child(path).set(saveData)
+            
+            sendemail(st_email)
             
       messagebox.showinfo("Message","Class Ready to Start!")
       cursor.close()
