@@ -43,7 +43,7 @@ def login():
     
 
 root=Tk()
-root.title('Login as admin - LearnMaster 1.0')
+root.title('Login as admin - LearnMaster 2.0')
 root.geometry('925x500+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
@@ -93,29 +93,35 @@ Frame(frame,
       bg='black').place(x=25,y=107)
 
 #add entry box for password
-def on_enter(e):
-    code.delete(0,'end')
-    
-def on_leave(e):
-    name=code.get()
-    if name=='':
-        code.insert(0,'Password')
-        
+def on_enter_password(e):
+    # Clear the password field when focused
+    if code.get() == 'Password':
+        code.delete(0, 'end')  # Clear the field
+    code.config(show='*')  # Mask the input as asterisks
+
+def on_leave_password(e):
+    # Restore the placeholder if the field is empty
+    if code.get() == '':
+        code.insert(0, 'Password')
+        code.config(show='')  # Show plain text for the placeholder
+    else:
+        code.config(show='*')  # Keep showing asterisks if not empty
+
 code = Entry(frame,
              width=25,
              fg='Black',
              border=0,
              bg='White',
-             font=('Microsoft YaHei UI Light',11))
-code.place(x=30,y=150)
-code.insert(0,'Password')
-code.bind('<FocusIn>',on_enter)
-code.bind('<FocusOut>',on_leave)
+             font=('Microsoft YaHei UI Light', 11))
+code.place(x=30, y=150)
+code.insert(0, 'Password')  # Set initial placeholder text
+code.bind('<FocusIn>', on_enter_password)  # Handle focus in
+code.bind('<FocusOut>', on_leave_password)  # Handle focus out
 
 Frame(frame,
       width=295,
       height=2,
-      bg='black').place(x=25,y=177)
+      bg='black').place(x=25, y=177)
 
 #add button
 Button(frame,

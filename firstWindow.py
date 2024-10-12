@@ -43,11 +43,13 @@ def loginasstudent():
 #create window
 root = tk.Tk()
 #window title
-root.title("LearnMaster Education Application 1.0")
+root.title("LearnMaster Education Application 2.0")
 #background colour of window
 root.configure(background="white")
 #set screen height and weight
 root.geometry("925x500+300+200")
+# Disable maximize option
+root.resizable(False, False)
 
 # Open the GIF file with Pillow
 gif_path = "C:/Users/DELL/Desktop/Python/Project parts/final Project/Images/world.gif"
