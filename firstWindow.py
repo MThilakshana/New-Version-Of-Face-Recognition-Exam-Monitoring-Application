@@ -13,10 +13,6 @@ mydb = mysql.connector.connect(
     database="learnmaster"
 )
 
-#create tables
-cursor = mydb.cursor()
-cursor.execute("CREATE TABLE IF NOT EXISTS studentdetails(SID int,Name TEXT,Email TEXT,Uname TEXT,Password TEXT)")
-
 def update_gif(frame):
     # Update the GIF frame
     frame_index = (frame + 1) % len(frames)

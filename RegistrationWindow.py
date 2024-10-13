@@ -11,6 +11,10 @@ mydb = mysql.connector.connect(
     database="learnmaster"
 )
 
+#create tables
+cursor = mydb.cursor()
+cursor.execute("CREATE TABLE IF NOT EXISTS studentdetails(id TEXT,name TEXT,email TEXT,uname TEXT,password TEXT)")
+
 def signinWin():
     result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/studentlogin.py'], check=True)
 
@@ -33,7 +37,7 @@ def saveData():
         passwordV = password.get()
         
         #check user name availble or not
-        sql = "SELECT Uname FROM studentdetails WHERE Uname= %s"
+        sql = "SELECT uname FROM studentdetails WHERE uname= %s"
         record = userV
         cursor.execute(sql,(record,))
         result = cursor.fetchone()
@@ -44,7 +48,7 @@ def saveData():
             #genarate sid
             cursor.execute("SELECT COUNT(*) FROM studentdetails")
             rowCount = cursor.fetchone()[0]
-            id = rowCount + 1
+            id = "STU" + str(rowCount + 1)
             
             #save data
             cursor.execute("INSERT INTO studentdetails VALUES(%s,%s,%s,%s,%s)",(id,nameV,emailV,userV,passwordV))
@@ -57,7 +61,7 @@ def saveData():
 
 
 root=Tk()
-root.title('Student Registation - LearnMaster 1.0')
+root.title('Student Registation - LearnMaster 2.0')
 root.geometry('925x500+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
@@ -160,12 +164,16 @@ Frame(frame,
 
 #entry box for password
 def on_enter(e):
-    password.delete(0,'end')
+    if password.get() == 'Password':
+        password.delete(0,'end')
+    password.config(show='*')
     
 def on_leave(e):
-    name=password.get()
-    if name=='':
+    if password.get() == '':
         password.insert(0,'Password')
+        password.config(show='')
+    else:
+        password.config(show='*')
         
 password = Entry(frame,
              width=25,
@@ -186,12 +194,16 @@ Frame(frame,
 
 #entry box for re-password
 def on_enter(e):
-    repassword.delete(0,'end')
+    if repassword.get() == 'Confirm Password':
+        repassword.delete(0,'end')
+    repassword.config(show='*')
     
 def on_leave(e):
-    name=repassword.get()
-    if name=='':
+    if repassword.get() == '':
         repassword.insert(0,'Confirm Password')
+        repassword.config(show='')
+    else:
+        repassword.config(show='*')
         
 repassword = Entry(frame,
              width=25,
