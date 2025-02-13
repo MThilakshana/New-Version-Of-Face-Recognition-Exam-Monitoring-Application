@@ -99,7 +99,7 @@ cursor.execute("CREATE TABLE IF NOT EXISTS classdetails(CID TEXT, CName TEXT, St
 cursor.execute("CREATE TABLE IF NOT EXISTS examdetails(EID TEXT, EName TEXT, ExamDate TEXT, ExamTime TEXT)")
     
 root=Tk()
-root.title('Admin Dashboard - LearnMaster 1.0')
+root.title('Admin Dashboard - LearnMaster 2.0')
 root.geometry('925x500+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
@@ -265,7 +265,7 @@ exit.place(x=5,y=460)
 
 #add label
 Label(mainframe,
-      text="Dashboard - LearnMaster 1.0",
+      text="Dashboard - LearnMaster 2.0",
       font=('Microsoft YaHei UI Light',20,'bold'),
       bg="#57a1f8",
       fg="White",
@@ -312,7 +312,7 @@ my_tree.heading('SID',text='SID',anchor=CENTER)
 my_tree.heading('Name',text='Name',anchor=CENTER)
 my_tree.heading('Email',text='Email',anchor=CENTER)
 
-addDataToStudentTable()
+#addDataToStudentTable()
 
 my_tree.place(x=10,y=30)
 
@@ -330,7 +330,7 @@ class_tree.heading('CID',text='CID',anchor=CENTER)
 class_tree.heading('Class',text='Class',anchor=CENTER)
 class_tree.heading('Date',text='Date',anchor=CENTER)
 
-addDataToClassTable()
+#addDataToClassTable()
 
 class_tree.place(x=10,y=30)
 
@@ -348,7 +348,7 @@ exam_tree.heading('EID',text='EID',anchor=CENTER)
 exam_tree.heading('Exam',text='Exam',anchor=CENTER)
 exam_tree.heading('Date',text='Date',anchor=CENTER)
 
-addDataToExamTable()
+#addDataToExamTable()
 
 exam_tree.place(x=10,y=40)
 

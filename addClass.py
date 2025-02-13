@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkcalendar import Calendar
 import mysql.connector
 from tkinter import messagebox
+import pyrebase
 
 #open date chooser
 def open_date_chooser():
@@ -36,24 +37,34 @@ mydb = mysql.connector.connect(
 
 cursor = mydb.cursor()
 
-#generate class ID
-def classId():
-    cursor.execute("SELECT COUNT(*) FROM classdetails")
-    rowCount = cursor.fetchone()[0]
-    global cid 
-    cid = "CID"+str(rowCount)
-
 #save data in database
 def saveData():
     if(name.get()=="Name" or startDate.get()=="Start Date"):
         messagebox.showinfo("Message","All field required")
     else:
-        classId()
-        cname = name.get()
-        date = startDate.get()
-        cursor.execute("INSERT INTO classdetails VALUES(%s,%s,%s)",(cid,cname,date))
-        mydb.commit()
-        messagebox.showinfo("Message",("Data Saved Successfully\nClass ID - "+cid))
+        #connect to the Firebase
+        config = {
+                "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+                "authDomain": "edumaster-project.firebaseapp.com",
+                "projectId": "edumaster-project",
+                "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+                "storageBucket": "edumaster-project.appspot.com",
+                "messagingSenderId": "945743272123",
+                "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+                "measurementId": "G-XNK127X4XJ"
+        }
+        
+        firebase = pyrebase.initialize_app(config)
+        database = firebase.database()
+        
+        #generate class id
+        classes = database.child("Class").get()
+        count = len(classes.val())
+        classid = "CID"+str(count)
+        
+        data_for_save ={"classid":classid,"classname":name.get(),"startdate":startDate.get()}
+        response = database.child("Class").child(classid).set(data_for_save)
+        messagebox.showinfo("Message","Class added Successfully!")
         root.destroy()
 
 root=Tk()
