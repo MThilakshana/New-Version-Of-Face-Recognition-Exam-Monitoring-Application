@@ -1,34 +1,45 @@
 from tkinter import *
 from tkinter import messagebox
-import mysql.connector
 import subprocess
-
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
+import pyrebase
 
 #check password
 def login():
-    try:
-        cursor = mydb.cursor()
-        sql = "SELECT Password FROM studentdetails WHERE Uname = %s"
-        record = user.get()
-        cursor.execute(sql,(record,))
-        result = cursor.fetchone()
-        password = result[0]
+    #connect to the Firebase
+    config = {
+        "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+        "authDomain": "edumaster-project.firebaseapp.com",
+        "projectId": "edumaster-project",
+        "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+        "storageBucket": "edumaster-project.appspot.com",
+        "messagingSenderId": "945743272123",
+        "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+        "measurementId": "G-XNK127X4XJ"
+    }
+        
+    firebase = pyrebase.initialize_app(config)
+    database = firebase.database()
+    
+    username = user.get()
+    password = code.get()
+    
+    students = database.child("StudentDetails").get()
+    
+    password_found = False
+        
+    if students.each():
+        for student in students.each():
+            student_data = student.val()
+            if 'username' in student_data and student_data['username'] == username:
+                if student_data['password'] == password:
+                    password_found = True
+                    studentWindow()
+                else:
+                    messagebox.showinfo("Warning","Invalid Password!")
+    
+    if password_found == False:
+        messagebox.showinfo("Warning","Invalid Username!")
 
-        #check password
-        if(password==code.get()):
-            studentWindow()
-        else:
-            messagebox.showinfo("Warning", "Incorrect Password or Username")
-        cursor.close()
-    except:
-        messagebox.showinfo("Warning", "Invalid Username") 
 
 #open register window 
 def registerWindow():

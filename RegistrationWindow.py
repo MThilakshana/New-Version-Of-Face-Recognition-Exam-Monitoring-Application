@@ -58,6 +58,7 @@ def saveData():
             response = database.child("StudentDetails").child(path).set(Data_to_save)
             messagebox.showinfo("Message","User Created Successfully!")
             root.destroy()
+            signinWin()
 
 
 root=Tk()
