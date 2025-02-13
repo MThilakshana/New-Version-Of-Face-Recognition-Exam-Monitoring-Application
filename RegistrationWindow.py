@@ -1,20 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
-import mysql.connector
 import subprocess
 import pyrebase
-
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
-
-#create tables
-cursor = mydb.cursor()
-cursor.execute("CREATE TABLE IF NOT EXISTS studentdetails(id TEXT,name TEXT,email TEXT,uname TEXT,password TEXT)")
 
 def signinWin():
     result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/studentlogin.py'], check=True)
@@ -70,7 +57,7 @@ def saveData():
             
             response = database.child("StudentDetails").child(path).set(Data_to_save)
             messagebox.showinfo("Message","User Created Successfully!")
-            cursor.close()
+            root.destroy()
 
 
 root=Tk()

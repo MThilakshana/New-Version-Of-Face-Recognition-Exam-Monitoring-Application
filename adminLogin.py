@@ -1,17 +1,9 @@
 from tkinter import *
 from tkinter import messagebox
-import mysql.connector
 from tkinter import messagebox
 import subprocess
+import pyrebase
 
-
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
 
 def signupacc():
     messagebox.showinfo("Warning", "Admin can't create new account")
@@ -22,25 +14,35 @@ def opennext():
     
 #check uname and password
 def login():
-    try:
-        cursor = mydb.cursor()
-        sql = "SELECT Password FROM admindetails WHERE Uname = %s"
-        record = user.get()
-        cursor.execute(sql,(record,))
-        result = cursor.fetchone()
-        password = result[0]
+    #connect to the Firebase
+    config = {
+        "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+        "authDomain": "edumaster-project.firebaseapp.com",
+        "projectId": "edumaster-project",
+        "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+        "storageBucket": "edumaster-project.appspot.com",
+        "messagingSenderId": "945743272123",
+        "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+        "measurementId": "G-XNK127X4XJ"
+    }
 
-        #check password
-        if(password==code.get()):
-            root.destroy()
-            opennext()
-        else:
-            messagebox.showinfo("Warning", "Incorrect Password or Username")
-        cursor.close()
-    except:
-        messagebox.showinfo("Warning", "Invalid Username")
-
+    firebase = pyrebase.initialize_app(config)
+    database = firebase.database()
     
+    username = user.get()
+    password = code.get()
+    
+    admin = database.child("AdminDetails").get()
+    
+    usernv = admin.val().get("username")
+    passva = admin.val().get("passwrd")
+    
+    if usernv == username and passva == password:
+        root.destroy()
+        print("hi")
+        opennext()
+    else:
+        messagebox.showinfo("Warning","UInvalid Username or Password!")
 
 root=Tk()
 root.title('Login as admin - LearnMaster 2.0')
