@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import mysql.connector
 import subprocess
+import pyrebase
 
 #connect to the database
 mydb = mysql.connector.connect(
@@ -29,35 +30,47 @@ def saveData():
         messagebox.showinfo("Message", "Password doesn't match")
         
     else:
-        cursor = mydb.cursor()
+        #connect to the Firebase
+        config = {
+                "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+                "authDomain": "edumaster-project.firebaseapp.com",
+                "projectId": "edumaster-project",
+                "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+                "storageBucket": "edumaster-project.appspot.com",
+                "messagingSenderId": "945743272123",
+                "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+                "measurementId": "G-XNK127X4XJ"
+        }
+        
+        firebase = pyrebase.initialize_app(config)
+        database = firebase.database()
+        
+        username = user.get()
+        emailv = email.get()
+        namev = name.get()
+        pw = password.get()
+        
+        username_exist = False
+        
+        students = database.child("StudentDetails").get()
+        
+        if students.each():
+            for student in students.each():
+                student_data = student.val()
+                if 'username' in student_data and student_data['username'] == username:
+                    username_exist = True
+                    break
                 
-        nameV = name.get()
-        emailV = email.get()
-        userV = user.get()
-        passwordV = password.get()
-        
-        #check user name availble or not
-        sql = "SELECT uname FROM studentdetails WHERE uname= %s"
-        record = userV
-        cursor.execute(sql,(record,))
-        result = cursor.fetchone()
-        
-        if result is not None:
-            messagebox.showinfo("Message", "Username already taken")
+        if username_exist:
+            messagebox.showinfo("Message","Username Already Exist!")
         else:
-            #genarate sid
-            cursor.execute("SELECT COUNT(*) FROM studentdetails")
-            rowCount = cursor.fetchone()[0]
-            id = "STU" + str(rowCount + 1)
+            Data_to_save = {"email":emailv,"name":namev,"password":pw,"username":username}
+            count  = len(students.val())
+            path = "STU"+str(count)
             
-            #save data
-            cursor.execute("INSERT INTO studentdetails VALUES(%s,%s,%s,%s,%s)",(id,nameV,emailV,userV,passwordV))
-            mydb.commit()
-            messagebox.showinfo("Message", "Data Saved Successfully")
-            root.destroy()
-            signinWin()
-        
-        cursor.close()
+            response = database.child("StudentDetails").child(path).set(Data_to_save)
+            messagebox.showinfo("Message","User Created Successfully!")
+            cursor.close()
 
 
 root=Tk()
