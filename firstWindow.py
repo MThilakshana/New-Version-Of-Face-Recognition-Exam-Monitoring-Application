@@ -3,15 +3,6 @@ import tkinter as tk
 from tkinter import messagebox
 import subprocess
 from PIL import Image, ImageTk
-import mysql.connector
-
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
 
 def update_gif(frame):
     # Update the GIF frame

@@ -56,7 +56,6 @@ def saveData():
         messagebox.showinfo("Message",("Data Saved Successfully\nClass ID - "+cid))
         root.destroy()
 
-
 root=Tk()
 root.title('Add New Class - LearnMaster 1.0')
 root.geometry('775x300+300+200')
