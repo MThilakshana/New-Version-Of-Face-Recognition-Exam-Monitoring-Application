@@ -1,71 +1,88 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-import mysql.connector
-
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
+import pyrebase
 
 #exit window
 def exitwindow():
     root.destroy()
+
+# check class
+def checkClass():
+    if cid.get() == "Class ID":
+        messagebox.showinfo("Warinig","Enter Class ID")
+    else:
+        class_brances = database.child("Class").get()
+        
+        cval = False
+        
+        if class_brances.val():
+            for branch_id, class_data in class_brances.val().items():
+                if class_data.get('classid') == cid.get():
+                    class_name = class_data.get('classname')
+                    cname.delete(0, END)
+                    cname.insert(END, class_name)
+                    cval = True
+                    break
+            if cval == False:
+                messagebox.showinfo("Warinig","Invalid Class ID")
     
 #add data to table
 def addData():
     subject = dropdown.get()
-    sql = "SELECT CID FROM classdetails WHERE CName = %s"
-    cursor.execute(sql,(subject,))
-    id = cursor.fetchone()
-    cid = id[0]
-    my_tree.insert('','end',values=(cid,subject))
+    student_ref = database.child("StudentDetails")
+    students = student_ref.get().val()
     
-#generate student id
-def generateId():
-    cursor.execute("SELECT COUNT(*) FROM students")
-    data = cursor.fetchone()
-    sid = int(data[0])+1
-    id = "STU"+str(sid)
-    return id
+    for student_key,student_data in students.items():
+        if student_data.get('name') == dropdown.get():
+            my_tree.insert('','end',values=(student_key,dropdown.get()))
     
 #save data in database
 def read():
-    if(name.get()=="Name" or email.get()=="Email"):
-        messagebox.showinfo("Message","Enter Name and Email")
+    if(cid.get()=="Class ID" or cname.get()=="CLass Name"):
+        messagebox.showinfo("Warning","Enter Class ID and Chek It!")
     else:
-        id = generateId()
-        nameV = name.get()
-        emailV = email.get()
-        record=(id,nameV,emailV)
-        sql = "INSERT INTO students VALUES(%s,%s,%s)"
-        cursor.execute(sql,record)
-        mydb.commit()
-        
         allItem = my_tree.get_children()
-        
+        count = 0
         for item in allItem:
+            count = count + 1
             values = my_tree.item(item,'values')
-            classid = values[0]
-            record2=(id,classid)
-            sql2 = "INSERT INTO studentcourse VALUES(%s,%s)"
-            cursor.execute(sql2,record2)
-            mydb.commit()
-        
+            Data_To_Save = {count:values[0]}
+            response = database.child("StudentToClass").child(cid.get()).update(Data_To_Save)
         messagebox.showinfo("Message","Data Saved Successfully")
         root.destroy()
-    
 
-#load data to dropdowan box
-cursor = mydb.cursor()
-cursor.execute("SELECT CID,CName FROM classdetails")
-data = cursor.fetchall()
+data =  []
+
+#connect to the Firebase
+config = {
+    "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+    "authDomain": "edumaster-project.firebaseapp.com",
+    "projectId": "edumaster-project",
+    "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+    "storageBucket": "edumaster-project.appspot.com",
+    "messagingSenderId": "945743272123",
+    "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+    "measurementId": "G-XNK127X4XJ"
+}
+        
+firebase = pyrebase.initialize_app(config)
+database = firebase.database()
+
+# add data to dropdown box
+student_ref = database.child("StudentDetails")
+student_data = student_ref.get()
+
+if student_data.each():
+    for student in student_data.each():
+        student_id = student.key()
+        student_name = student.val().get('name')
+        
+        if student_name:
+            data.append((student_id,student_name))
 
 root=Tk()
-root.title('Add New Student - LearnMaster 1.0')
+root.title('Students To Class - LearnMaster 2.0')
 root.geometry('925x500+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
@@ -85,7 +102,7 @@ frame.place(x=450,y=5)
 
 #add label
 label = Label(frame,
-              text="Add New Student",
+              text="Students To Class",
               fg='#57a1f8',
               bg='white',
               font=('Microsoft YaHei UI Light',25,'bold'))
@@ -93,56 +110,55 @@ label.place(x=95,y=0)
 
 #entry box for name
 def on_enter(e):
-    name.delete(0,'end')
+    cid.delete(0,'end')
     
 def on_leave(e):
-    name1=name.get()
+    name1=cid.get()
     if name1=='':
-        name.insert(0,'Name')
+        cid.insert(0,'Class ID')
         
-name = Entry(frame,
+cid = Entry(frame,
              width=50,
              fg='Black',
              border=0,
              bg='White',
              font=('Microsoft YaHei UI Light',11))
-name.place(x=30,y=75)
-name.insert(0,'Name')
-name.bind('<FocusIn>',on_enter)
-name.bind('<FocusOut>', on_leave)
+cid.place(x=30,y=75)
+cid.insert(0,'Class ID')
+cid.bind('<FocusIn>',on_enter)
+cid.bind('<FocusOut>', on_leave)
 
 #add line
 Frame(frame,
-      width=410,
+      width=270,
       height=2,
       bg='black').place(x=25,y=102)
 
-#entry box for email
+#entry box for cname
 def on_enter(e):
-    email.delete(0,'end')
+    cname.delete(0,'end')
     
 def on_leave(e):
-    name=email.get()
+    name=cname.get()
     if name=='':
-        email.insert(0,'Email')
+        cname.insert(0,'Class Name')
         
-email = Entry(frame,
+cname = Entry(frame,
              width=50,
              fg='Black',
              border=0,
              bg='White',
              font=('Microsoft YaHei UI Light',11))
-email.place(x=30,y=145)
-email.insert(0,'Email')
-email.bind('<FocusIn>',on_enter)
-email.bind('<FocusOut>', on_leave)
+cname.place(x=30,y=145)
+cname.insert(0,'Class Name')
+cname.bind('<FocusIn>',on_enter)
+cname.bind('<FocusOut>', on_leave)
 
 #add line
 Frame(frame,
       width=410,
       height=2,
       bg='black').place(x=25,y=172)
-
 
 #add drop box
 def on_select(e):
@@ -156,7 +172,7 @@ dropdown = ttk.Combobox(frame,
                         font=('Microsoft YaHei UI Light',11),
                         width=30)
 dropdown['values'] = [item[1] for item in data]
-dropdown.set("Select Subjects")
+dropdown.set("Select Student")
 dropdown.place(x=30,y=215)
 dropdown.bind('<<ComboboxSelected>>',on_select)
 
@@ -174,6 +190,20 @@ addbtn = Button(frame,
                 command=addData)
 addbtn.place(x=330,y=207)
 
+#check button
+checkbtn = Button(frame,
+                text="Check",
+                font=('Microsoft YaHei UI Light',11, 'bold'),
+                width=10,
+                height=0,
+                bg='#57a1f8',
+                border=0,
+                pady=2,
+                fg='White',
+                cursor='hand2',
+                command=checkClass)
+checkbtn.place(x=330,y=75)
+
 #add table
 my_tree = ttk.Treeview(frame,height=6)
 my_tree['columns'] = ("CID","CName")
@@ -190,7 +220,7 @@ my_tree.column('CID',width=100,anchor=CENTER)
 my_tree.column('CName',width=300,anchor=W)
 #create heading
 my_tree.heading('CID',text="ID",anchor=CENTER)
-my_tree.heading('CName',text="Course Name",anchor=CENTER)
+my_tree.heading('CName',text="Student Name",anchor=CENTER)
 
 my_tree.place(x=30,y=250)
 
@@ -218,6 +248,5 @@ exitbtn = Button(frame,
                 width=10,
                 height=0,command=exitwindow)
 exitbtn.place(x=350,y=465)
-
 
 root.mainloop()

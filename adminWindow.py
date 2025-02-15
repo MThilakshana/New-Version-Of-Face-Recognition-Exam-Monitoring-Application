@@ -169,7 +169,7 @@ addnewclass = Button(blueframe,
 addnewclass.place(x=5,y=120)
 
 addnewstudent = Button(blueframe,
-                      text="Add New Student",
+                      text="Students To Class",
                       border=0,
                       bg="#57a1f8",
                       fg='white',
