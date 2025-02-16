@@ -1,41 +1,40 @@
 from tkinter import *
 from tkinter import messagebox
-import mysql.connector
-
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
-cursor = mydb.cursor()
+import pyrebase
 
 #load function
 def loadData():
-    record = eid.get()
-    sql = "SELECT Name,Date,Time FROM examdetails WHERE EID = %s"
-    cursor.execute(sql,(record,))
-    data = cursor.fetchone()
-    
-    if(data==None):
-        messagebox.showinfo("Warning","Invalid Class ID")
-        eid.delete(0,'end')
+    if eid.get() != "":
+        exid = eid.get()
+        exam_ref = database.child("SheduleExam").child(exid)
+        exam_data = exam_ref.get().val()
+        
+        if exam_data:
+            ename.insert(0,exam_data.get('examname'))
+            edate.insert(0,exam_data.get('examdate'))
+            etime.insert(0,exam_data.get('examtime'))
+        else:
+            messagebox.showinfo("Warning","Invalid Exam ID!")
     else:
-        ename.insert(0,data[0])
-        edate.insert(0,data[1])
-        etime.insert(0,data[2])
+        messagebox.showinfo("Warning","Enter Exam ID!")
     
     
 #update function
 def updateData():
-    record = (ename.get(),etime.get(),edate.get(),eid.get())
-    sql = "UPDATE examdetails SET Name=%s,Time=%s,Date=%s WHERE EID=%s"
-    cursor.execute(sql,record)
-    mydb.commit()
-    messagebox.showinfo("Message","Data Updated Successfully!")
-    root.destroy()
-
+    examid = eid.get()
+    examname = ename.get()
+    examtime = etime.get()
+    examdate = edate.get()
+    
+    if (examdate != "" or examid != "" or examname != "" or examtime != ""):
+        data_to_save = {"examname":examname,"examdate":examdate,"examtime":examtime}
+        database.child("SheduleExam").child(examid).update(data_to_save)
+        messagebox.showinfo("Message","Data Updated Successfully!")
+        root.destroy()
+    else:
+        messagebox.showinfo("Warning","All filed required!")
+    
+'''
 #delete function
 def deleteData():
     record = eid.get()
@@ -43,10 +42,25 @@ def deleteData():
     cursor.execute(sql,(record,))
     mydb.commit()
     messagebox.showinfo("Message","Data Deleted Successfully!")
-    root.destroy()
+    root.destroy()'''
+    
+#connect to the Firebase
+config = {
+    "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+    "authDomain": "edumaster-project.firebaseapp.com",
+    "projectId": "edumaster-project",
+    "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+    "storageBucket": "edumaster-project.appspot.com",
+    "messagingSenderId": "945743272123",
+    "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+    "measurementId": "G-XNK127X4XJ"
+}
+        
+firebase = pyrebase.initialize_app(config)
+database = firebase.database()
 
 root=Tk()
-root.title('Edit Exam Details - LearnMaster 1.0')
+root.title('Edit Exam Details - LearnMaster 2.0')
 root.geometry('885x380+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
@@ -192,8 +206,7 @@ deletebtn = Button(frame,
                 border=0,
                 pady=2,
                 fg='White',
-                cursor='hand2',
-                command=deleteData)
+                cursor='hand2')
 deletebtn.place(x=250,y=330)
 
 #exit button

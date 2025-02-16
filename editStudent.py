@@ -1,16 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
-import mysql.connector
 import pyrebase
-
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
-cursor = mydb.cursor()
 
 #load function
 def loadData():
@@ -68,7 +58,7 @@ firebase = pyrebase.initialize_app(config)
 database = firebase.database()
 
 root=Tk()
-root.title('Edit Student Details - LearnMaster 1.0')
+root.title('Edit Student Details - LearnMaster 2.0')
 root.geometry('835x330+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
