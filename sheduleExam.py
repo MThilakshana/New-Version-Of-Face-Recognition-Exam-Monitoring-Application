@@ -1,17 +1,8 @@
 from tkinter import messagebox
-import mysql.connector
 from tkcalendar import Calendar
 from tkinter import *
 from tkinter import ttk
-
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
-cursor = mydb.cursor()
+import pyrebase
 
 #exit button
 def exitwindow():
@@ -19,11 +10,8 @@ def exitwindow():
     
 #generate exam id
 def genexamsid():
-    sql = "SELECT COUNT(*) FROM examdetails"
-    cursor.execute(sql)
-    data = cursor.fetchone()
-    id = int(data[0])+1
-    examID = "EXM"+str(id)
+    exam = database.child("SheduleExam").get()
+    examID = "EXM"+ str(len(exam.val())+1)
     return examID
     
 #save data
@@ -36,15 +24,29 @@ def read():
         ename = name.get()
         etime = time.get()
         edate = examDate.get()
-        record = (examID,ename,etime,edate,subid)
-        sql = "INSERT INTO examdetails VALUES(%s,%s,%s,%s,%s)"
-        cursor.execute(sql,record)
-        mydb.commit()
+        
+        data_to_save = {"examid":examID,"subjectid":subid,"examname":ename,"examtime":etime,"examdate":edate}
+        database.child("SheduleExam").child(examID).set(data_to_save)
         messagebox.showinfo("Message", "Data Saved Successfully!")
         root.destroy()
+        
+#connect to the Firebase
+config = {
+    "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+    "authDomain": "edumaster-project.firebaseapp.com",
+    "projectId": "edumaster-project",
+    "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+    "storageBucket": "edumaster-project.appspot.com",
+    "messagingSenderId": "945743272123",
+    "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+    "measurementId": "G-XNK127X4XJ"
+}
+        
+firebase = pyrebase.initialize_app(config)
+database = firebase.database()
 
 root=Tk()
-root.title('Schedule Exam - LearnMaster 1.0')
+root.title('Schedule Exam - LearnMaster 2.0')
 root.geometry('775x400+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
