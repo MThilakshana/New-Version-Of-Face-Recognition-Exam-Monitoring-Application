@@ -1,16 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
-import mysql.connector
 import pyrebase
-
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
-cursor = mydb.cursor()
 
 #load data 
 def loaddata():

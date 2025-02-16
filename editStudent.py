@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import mysql.connector
+import pyrebase
 
 #connect to the database
 mydb = mysql.connector.connect(
@@ -14,30 +15,34 @@ cursor = mydb.cursor()
 #load function
 def loadData():
     sidval = sid.get()
-    record = (sidval)
-    sql = "SELECT Name,Email FROM students WHERE SID=%s"
-    cursor.execute(sql,(record,))
-    data = cursor.fetchone()
-    
-    if(data==None):
-        messagebox.showinfo("Warning","Invalid Class ID")
-        sid.delete(0,'end')
+    if sidval != "":
+        students_ref = database.child('StudentDetails').child(sidval)
+        student_data = students_ref.get().val()
+        
+        if student_data:
+            sname.insert(0,student_data.get('name'))
+            email.insert(0,student_data.get('email'))
+        else:
+            messagebox.showinfo("Warning","Invalid Student ID!")
     else:
-        sname.insert(0,data[0])
-        email.insert(0,data[1])
+        messagebox.showinfo("Warning","Enter Student ID!")
+    
         
 #update function
 def updateData():
     stuid = sid.get()
-    namestudent =sname.get()
-    emailstu = email.get()
-    record = (namestudent,emailstu,stuid)
-    sql = "UPDATE students SET Name=%s,Email=%s WHERE SID=%s"
-    cursor.execute(sql,record)
-    mydb.commit()
-    messagebox.showinfo("Message","Data Updated Successfully!")
-    root.destroy()
+    stuname = sname.get()
+    semail = email.get()
     
+    if (stuid != "" or stuname != "" or  semail != ""):
+        data_to_save = {"name":stuname,"email":semail}
+        database.child("StudentDetails").child(stuid).update(data_to_save)
+        messagebox.showinfo("Message","Data Updated Successfully!")
+        root.destroy()
+    else:
+        messagebox.showinfo("Warning","All filed required!")
+        
+'''    
 #delete function
 def deleteData():
     sql = "DELETE FROM students WHERE SID = %s"
@@ -45,7 +50,22 @@ def deleteData():
     cursor.execute(sql,(record,))
     mydb.commit()
     messagebox.showinfo("Message","Data Deleted Successfully!")
-    root.destroy()
+    root.destroy()'''
+    
+#connect to the Firebase
+config = {
+    "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+    "authDomain": "edumaster-project.firebaseapp.com",
+    "projectId": "edumaster-project",
+    "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+    "storageBucket": "edumaster-project.appspot.com",
+    "messagingSenderId": "945743272123",
+    "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+    "measurementId": "G-XNK127X4XJ"
+}
+        
+firebase = pyrebase.initialize_app(config)
+database = firebase.database()
 
 root=Tk()
 root.title('Edit Student Details - LearnMaster 1.0')
@@ -167,8 +187,7 @@ deletebtn = Button(frame,
                 border=0,
                 pady=2,
                 fg='White',
-                cursor='hand2',
-                command=deleteData)
+                cursor='hand2')
 deletebtn.place(x=250,y=280)
 
 #edit button
