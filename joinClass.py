@@ -13,21 +13,6 @@ def joinclassbtn():
         student_id = stuid.get()
         file_name = student_id+"_"+class_id
         
-        #connect to the Firebase
-        config = {
-                "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
-                "authDomain": "edumaster-project.firebaseapp.com",
-                "projectId": "edumaster-project",
-                "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
-                "storageBucket": "edumaster-project.appspot.com",
-                "messagingSenderId": "945743272123",
-                "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
-                "measurementId": "G-XNK127X4XJ"
-        }
-      
-        firebase = pyrebase.initialize_app(config)
-        database = firebase.database()
-        
         readdata = database.child("StudentCourse").child(file_name).get().val()
         
         if (readdata==None):
@@ -47,6 +32,21 @@ mydb = mysql.connector.connect(
 )
 
 cursor = mydb.cursor()
+
+#connect to the Firebase
+config = {
+    "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+    "authDomain": "edumaster-project.firebaseapp.com",
+    "projectId": "edumaster-project",
+    "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+    "storageBucket": "edumaster-project.appspot.com",
+    "messagingSenderId": "945743272123",
+    "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+    "measurementId": "G-XNK127X4XJ"
+    }
+      
+firebase = pyrebase.initialize_app(config)
+database = firebase.database()
 
 root=Tk()
 root.title('Join To Class - LearnMaster 1.0')

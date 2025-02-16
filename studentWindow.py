@@ -32,7 +32,7 @@ def exitwin():
         root.destroy()
 
 root=Tk()
-root.title('Student Dashboard - LearnMaster 1.0')
+root.title('Student Dashboard - LearnMaster 2.0')
 root.geometry('925x500+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
@@ -100,7 +100,7 @@ exit.place(x=5,y=460)
 
 #add label
 Label(mainframe,
-      text="Dashboard - LearnMaster 1.0",
+      text="Dashboard - LearnMaster 2.0",
       font=('Microsoft YaHei UI Light',20,'bold'),
       bg="#57a1f8",
       fg="White",
