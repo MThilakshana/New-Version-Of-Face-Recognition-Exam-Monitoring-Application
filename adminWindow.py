@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
-import mysql.connector
 from tkinter import ttk
 import subprocess
+import pyrebase
 
 #define startExam button
 def startclasswindow():
@@ -57,47 +57,74 @@ def openexamshedule():
       result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/sheduleExam.py'], check=True)
       root.destroy()
       result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/adminWindow.py'], check=True)
-      
+
 def addDataToStudentTable():
-      my_tree.delete(*my_tree.get_children())
-      mysql = "SELECT SID,Name,Email from students"
-      cursor.execute(mysql)
+      student_data = {}
+      students = database.child("StudentDetails").get()
+      
+      for student in students.each():
+            student_id = student.key()
+            student_details = student.val()
+            student_data[student_id] = student_details
+            
+      # add data to the table
       count = 0
-      for row in cursor:
-            my_tree.insert(parent='',index='end',iid=count,text='',values=row,tags=("custom_font"))
-            count=count+1
+      for student_id,details in student_data.items():
+            if count == 0: # to skip first data row
+                  count = count + 1 
+                  continue 
+            name = details.get("name","N/A")
+            email = details.get("email","N/A")
+            my_tree.insert("","end",values=(student_id,name,email))
             
 def addDataToClassTable():
-      class_tree.delete(*class_tree.get_children())
-      mysql = "SELECT CID,CName,StartDate FROM classdetails"
-      cursor.execute(mysql)
+      class_data = {}
+      classes = database.child("Class").get()
+      
+      for classv in classes.each():
+            class_id = classv.key()
+            class_details = classv.val()
+            class_data[class_id] = class_details
+            
       count = 0
-      for row in cursor:
-            class_tree.insert(parent='',index='end',iid=count,text='',values=row,tags=("custom_font"))
-            count = count + 1
+      for class_id,details in class_data.items():
+            if count == 0:
+                  count = count + 1
+                  continue
+            classid = details.get("classid","N/A")
+            classname = details.get("classname","N/A")
+            startdate = details.get("startdate","N/A")
+            class_tree.insert("",'end',values=(classid,classname,startdate))
             
 def addDataToExamTable():
-      exam_tree.delete(*exam_tree.get_children())
-      mysql = "SELECT EID,Name,Date	FROM examdetails"
-      cursor.execute(mysql)
-      count = 0
-      for row in cursor:
-            exam_tree.insert(parent='',index='end',iid=count,text='',values=row,tags=("custom_font"))
-            count = count + 1
+      exam_data = {}
+      exams = database.child("SheduleExam").get()
+      
+      for exam in exams.each():
+            exam_id = exam.key()
+            exam_Details = exam.val()
+            exam_data[exam_id] = exam_Details
+            
+      for exam_id,details in exam_data.items():
+            name = details.get("examname")
+            date = details.get("examdate")
+            exam_tree.insert("","end",values=(exam_id,name,date))
         
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
+#connect to the Firebase
+config = {
+    "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+    "authDomain": "edumaster-project.firebaseapp.com",
+    "projectId": "edumaster-project",
+    "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+    "storageBucket": "edumaster-project.appspot.com",
+    "messagingSenderId": "945743272123",
+    "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+    "measurementId": "G-XNK127X4XJ"
+}
+        
+firebase = pyrebase.initialize_app(config)
+database = firebase.database()
 
-#create tables
-cursor = mydb.cursor()
-cursor.execute("CREATE TABLE IF NOT EXISTS classdetails(CID TEXT, CName TEXT, StartDate TEXT)")
-cursor.execute("CREATE TABLE IF NOT EXISTS examdetails(EID TEXT, EName TEXT, ExamDate TEXT, ExamTime TEXT)")
-    
 root=Tk()
 root.title('Admin Dashboard - LearnMaster 2.0')
 root.geometry('925x500+300+200')
@@ -312,7 +339,7 @@ my_tree.heading('SID',text='SID',anchor=CENTER)
 my_tree.heading('Name',text='Name',anchor=CENTER)
 my_tree.heading('Email',text='Email',anchor=CENTER)
 
-#addDataToStudentTable()
+addDataToStudentTable()
 
 my_tree.place(x=10,y=30)
 
@@ -330,7 +357,7 @@ class_tree.heading('CID',text='CID',anchor=CENTER)
 class_tree.heading('Class',text='Class',anchor=CENTER)
 class_tree.heading('Date',text='Date',anchor=CENTER)
 
-#addDataToClassTable()
+addDataToClassTable()
 
 class_tree.place(x=10,y=30)
 
@@ -348,7 +375,7 @@ exam_tree.heading('EID',text='EID',anchor=CENTER)
 exam_tree.heading('Exam',text='Exam',anchor=CENTER)
 exam_tree.heading('Date',text='Date',anchor=CENTER)
 
-#addDataToExamTable()
+addDataToExamTable()
 
 exam_tree.place(x=10,y=40)
 
