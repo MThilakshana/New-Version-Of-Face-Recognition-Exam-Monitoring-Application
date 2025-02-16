@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import mysql.connector
+import pyrebase
 
 #connect to the database
 mydb = mysql.connector.connect(
@@ -13,22 +14,19 @@ cursor = mydb.cursor()
 
 #load data 
 def loaddata():
-    try:
-        cidVal = cid.get()
-        record = (cidVal)
-        sql = "SELECT CName, StartDate FROM classdetails WHERE CID = %s"
-        cursor.execute(sql,(record,))
-        data = cursor.fetchone()
-        
-        if(data==None):
-            messagebox.showinfo("Warning","Invalid Class ID")
-            cid.delete(0,'end')
-        else:
-            cname.insert(0,data[0])
-            cdate.insert(0,data[1])
-    except mysql.connector.Error as err:
-        messagebox.showinfo("Warning","Error Detected!")
+    class_id = cid.get()
+    classes_ref = database.child('Class')
+    class_data = classes_ref.get().val()
+    
+    for class_key, class_info in class_data.items():
+        if class_info.get("classid") == class_id:
+            cname.delete(0,END)
+            cname.insert(0,class_info.get("classname"))
+            cdate.delete(0,END)
+            cdate.insert(0,class_info.get("startdate"))
+            break
 
+'''
 #delete data
 def deleteData():
     sql = "DELETE FROM classdetails WHERE CID = %s"
@@ -36,23 +34,38 @@ def deleteData():
     cursor.execute(sql,(record,))
     mydb.commit()
     messagebox.showinfo("Message","Data Deleted Successfully!")
-    root.destroy()
+    root.destroy()'''
     
 #update data
 def updateData():
-    clasid = cid.get()
-    nameclass = cname.get()
-    clsdate = cdate.get()
-    record = (nameclass,clsdate,clasid)
-    sql = "UPDATE classdetails set CName=%s, StartDate=%s WHERE CID=%s"
-    cursor.execute(sql,record)
-    mydb.commit()
-    messagebox.showinfo("Message","Data Updated Successfully!")
-    root.destroy()
+    class_id = cid.get()
+    class_ref = database.child('Class')
+    class_data = class_ref.get().val()
     
+    for class_key,class_info in class_data.items():
+        if class_info.get("classid") == class_id:
+            data_to_save = {"classid":cid.get(),"classname":cname.get(),"startdate":cdate.get()}
+            database.child("Class").child(class_id).set(data_to_save)
+            messagebox.showinfo("Message","Data Updated Successfully!")
+            root.destroy()
+    
+#connect to the Firebase
+config = {
+    "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+    "authDomain": "edumaster-project.firebaseapp.com",
+    "projectId": "edumaster-project",
+    "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+    "storageBucket": "edumaster-project.appspot.com",
+    "messagingSenderId": "945743272123",
+    "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+    "measurementId": "G-XNK127X4XJ"
+}
+        
+firebase = pyrebase.initialize_app(config)
+database = firebase.database()
 
 root=Tk()
-root.title('Edit Class Details - LearnMaster 1.0')
+root.title('Edit Class Details - LearnMaster 2.0')
 root.geometry('925x350+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
@@ -165,8 +178,7 @@ deletebtn = Button(root,
                 border=0,
                 pady=2,
                 fg='White',
-                cursor='hand2',
-                command=deleteData)
+                cursor='hand2')
 deletebtn.place(x=250,y=280)
 
 #edit button

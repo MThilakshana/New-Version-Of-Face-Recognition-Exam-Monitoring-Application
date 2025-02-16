@@ -39,7 +39,7 @@ def addData():
     
 #save data in database
 def read():
-    if(cid.get()=="Class ID" or cname.get()=="CLass Name"):
+    if(cid.get()=="Class ID" or cname.get()=="Class Name"):
         messagebox.showinfo("Warning","Enter Class ID and Chek It!")
     else:
         allItem = my_tree.get_children()
