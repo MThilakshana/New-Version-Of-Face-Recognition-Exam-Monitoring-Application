@@ -16,27 +16,25 @@ cursor = mydb.cursor()
 
 #check details of class
 def checkBtn():
-      if(cid.get()=="Class ID"):
+      if (cid.get()=="Class ID"):
             messagebox.showinfo("Warning","Enter Class ID")
       else:
-            sql = "SELECT CName FROM classdetails WHERE CID = %s"
-            record = (cid.get(),)
-            cursor.execute(sql,record)
-            cname = cursor.fetchone()
+            clsid = cid.get()
+            class_data = database.child("Class").child(clsid).get().val()
             
-            if(cname==None):
-                  messagebox.showinfo("Warning","Invalid Class ID!")
+            if class_data:
+                  clsname = class_data.get('classname')
+                  clsnameEntry.insert(0,clsname)
             else:
-                  clsnameEntry.insert(0,cname[0])
-                  
-            sql = "SELECT SID FROM studentcourse WHERE CID = %s"
-            cursor.execute(sql,record)
-            data = cursor.fetchall()
-            stcount = 0
-            for row in data:
-                  stcount = stcount +1 
+                  messagebox.showinfo("Warning","Invalid Classt ID!")
+
+            stu_to_cls = database.child("StudentToClass").child(clsid).get().val()
             
-            stucount.insert(0,stcount)
+            if stu_to_cls:
+                  stu_count = len(stu_to_cls) - 1
+                  stucount.insert(0,stu_count)
+            else:
+                  messagebox.showinfo("Warning","Students not assign yet!")
             
 #send email
 def sendemail(st_email):
@@ -44,7 +42,7 @@ def sendemail(st_email):
             
             
 #add function to start button
-def startClass():
+'''def startClass():
       
       class_Name = clsnameEntry.get()
       class_id = cid.get()
@@ -55,22 +53,6 @@ def startClass():
       record = (class_id,)
       cursor.execute(sql,record)
       data = cursor.fetchall()
-      
-            
-      #connect to the Firebase
-      config = {
-            "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
-            "authDomain": "edumaster-project.firebaseapp.com",
-            "projectId": "edumaster-project",
-            "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
-            "storageBucket": "edumaster-project.appspot.com",
-            "messagingSenderId": "945743272123",
-            "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
-            "measurementId": "G-XNK127X4XJ"
-      }
-      
-      firebase = pyrebase.initialize_app(config)
-      database = firebase.database()
       
       #add data to firebase
       for row in data:
@@ -88,7 +70,28 @@ def startClass():
             
       messagebox.showinfo("Message","Class Ready to Start!")
       cursor.close()
-      root.destroy() 
+      root.destroy()'''
+      
+def startClass():
+      class_Name = clsnameEntry.get()
+      class_id = cid.get()
+      class_date = dateEntry.get()
+      class_time = hour_combo.get() + ":" + minute_combo.get()
+      
+#connect to the Firebase
+config = {
+      "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+      "authDomain": "edumaster-project.firebaseapp.com",
+      "projectId": "edumaster-project",
+      "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+      "storageBucket": "edumaster-project.appspot.com",
+      "messagingSenderId": "945743272123",
+      "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+      "measurementId": "G-XNK127X4XJ"
+}
+      
+firebase = pyrebase.initialize_app(config)
+database = firebase.database()
 
 root=Tk()
 root.title('Start Lecture - LearnMaster 1.0')
