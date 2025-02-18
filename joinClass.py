@@ -1,6 +1,5 @@
 import subprocess
 from tkinter import *
-import mysql.connector
 from tkinter import messagebox
 import pyrebase
 
@@ -11,9 +10,9 @@ def joinclassbtn():
     else:
         class_id = clsID.get()
         student_id = stuid.get()
-        file_name = student_id+"_"+class_id
+        file_name = class_id+"_"+student_id
         
-        readdata = database.child("StudentCourse").child(file_name).get().val()
+        readdata = database.child("StartClass").child(file_name).get().val()
         
         if (readdata==None):
             messagebox.showinfo("Warning","Invalid Class ID or Student ID")
@@ -21,17 +20,6 @@ def joinclassbtn():
             root.iconify() #hide the window
             from classtimewindow import assignvalue
             assignvalue(class_id,student_id)
-    
-    
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
-
-cursor = mydb.cursor()
 
 #connect to the Firebase
 config = {

@@ -3,7 +3,7 @@ import mysql.connector
 import cv2
 from tkinter import messagebox
 from datetime import datetime
-import time
+import pyrebase
 
 #connect to the database
 mydb = mysql.connector.connect(
@@ -15,10 +15,10 @@ mydb = mysql.connector.connect(
 cursor = mydb.cursor()
 
 #function for capture images from web cam
-def captureImage():
-    sql = "SELECT COUNT(*) FROM classdatainstudentview"
-    cursor.execute(sql)
-    imagecount = int(cursor.fetchone()[0]) + 1
+def captureImage(database):
+    stu_data = database.child("ClassDataInStudentView").get()
+    stu_data_val = stu_data.val()
+    imagecount = len(stu_data_val)
     imagepath = "C:/Users/DELL/Desktop/Python/Project parts/final Project/CapturedImage/ExamTime/"
     
     messagebox.showinfo("Important","Press space to enter class\nWhen open the camera otherwise\npress ecs to exit")
@@ -33,7 +33,7 @@ def captureImage():
             messagebox.showinfo("Warning","Image capturing Error!")
             break
         
-        cv2.imshow("LearnMaster - 1.0",frame)
+        cv2.imshow("LearnMaster - 2.0",frame)
         k = cv2.waitKey(1)
         if k%256 == 27:
             print("closing...")
@@ -45,14 +45,14 @@ def captureImage():
             print("closing...")
             break
         
-        imagename = "{}MyImage{}.png".format(imagepath,str(imagecount))
+        '''imagename = "{}MyImage{}.png".format(imagepath,str(imagecount))
         cv2.imshow("LearnMaster - 1.0",frame)
-        cv2.imwrite(imagename,frame)
+        cv2.imwrite(imagename,frame)'''
         
     cam.release()
     cv2.destroyAllWindows()
 
-def endclassbutton(class_id,student_id,root):
+def endclassbutton(class_id,student_id,root,database):
     cls_id = class_id
     stu_id = student_id
     
@@ -63,23 +63,36 @@ def endclassbutton(class_id,student_id,root):
     #get current time
     current_time = datetime.now().time()
     current_time_string = current_time.strftime('%H:%M:%S')
-    
-    record = (cls_id,stu_id,current_date_string,current_time_string)
-    sql = "INSERT INTO classdatainstudentview VALUES(%s,%s,%s,%s)"
 
-    cursor.execute(sql,record)
-    mydb.commit()
-    cursor.close()
+    data_to_save = {"classid":class_id,"studentid":stu_id,"date":current_date_string,"time":current_time_string}
+    path = str(class_id)+"_"+str(stu_id)
+    database.child("ClassDataInStudentView").child(path).set(data_to_save)
     messagebox.showinfo("Message","Data Saved!")
+    root.destroy()
     
 def assignvalue(cid,sid):
     class_id = cid
     student_id = sid
     
-    captureImage()
+    #connect to the Firebase
+    config = {
+        "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+        "authDomain": "edumaster-project.firebaseapp.com",
+        "projectId": "edumaster-project",
+        "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+        "storageBucket": "edumaster-project.appspot.com",
+        "messagingSenderId": "945743272123",
+        "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+        "measurementId": "G-XNK127X4XJ"
+    }
+        
+    firebase = pyrebase.initialize_app(config)
+    database = firebase.database()
+    
+    captureImage(database)
     
     root=Tk()
-    root.title('End Class - LearnMaster 1.0')
+    root.title('End Class - LearnMaster 2.0')
     root.geometry('300x180+300+200')
     root.configure(bg="#fff")
     root.resizable(False,False)
@@ -108,7 +121,7 @@ def assignvalue(cid,sid):
                     fg='white',
                     border=0,
                     cursor='hand2',
-                    command=lambda: endclassbutton(class_id,student_id,root))
+                    command=lambda: endclassbutton(class_id,student_id,root,database))
     endbtn.pack(fill=X,pady=20,padx=40)
 
     root.mainloop()
