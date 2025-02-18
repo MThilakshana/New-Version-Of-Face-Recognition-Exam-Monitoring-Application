@@ -1,18 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 from datetime import datetime,date
-import mysql.connector
 from tkinter import messagebox
 import pyrebase
-
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
-cursor = mydb.cursor()
 
 #check details of class
 def checkBtn():
@@ -262,6 +252,5 @@ exitbtn = Button(root,
                 font=('Microsoft YaHei UI Light',8),
                 command=root.destroy)
 exitbtn.place(x=188,y=468)
-
 
 root.mainloop()
