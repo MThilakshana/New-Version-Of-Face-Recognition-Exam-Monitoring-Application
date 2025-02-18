@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-from datetime import datetime
+from datetime import datetime,date
 import mysql.connector
 from tkinter import messagebox
 import pyrebase
@@ -42,41 +42,22 @@ def sendemail(st_email):
             
             
 #add function to start button
-'''def startClass():
-      
-      class_Name = clsnameEntry.get()
-      class_id = cid.get()
-      class_date = dateEntry.get()
-      class_time = hour_combo.get() + ":" + minute_combo.get()
-      
-      sql = "SELECT students.Name, students.SID, students.Email FROM students JOIN studentcourse ON students.SID = studentcourse.SID WHERE studentcourse.CID = %s"
-      record = (class_id,)
-      cursor.execute(sql,record)
-      data = cursor.fetchall()
-      
-      #add data to firebase
-      for row in data:
-            st_name = row[0]
-            st_id = row[1]
-            st_email = row[2]
-            
-            saveData = {"Class_ID":class_id,"Class_Name":class_Name,"Student_ID":st_id,"Student_Name":st_name,"Student_Email":st_email,"Class_Date":class_date,"Class_Time":class_time}
-            
-            path = st_id+"_"+class_id
-            #save data
-            response = database.child("StudentCourse").child(path).set(saveData)
-            
-            sendemail(st_email)
-            
-      messagebox.showinfo("Message","Class Ready to Start!")
-      cursor.close()
-      root.destroy()'''
-      
 def startClass():
       class_Name = clsnameEntry.get()
       class_id = cid.get()
       class_date = dateEntry.get()
       class_time = hour_combo.get() + ":" + minute_combo.get()
+      start_date = str(date.today())
+      start_time = str(datetime.now().time())
+      
+      if class_Name=="" or stucount.get()=="":
+            messagebox.showinfo("Warning","Please check the Class ID!")
+      else:
+            data_to_save = {"classname":class_Name,"startdate":start_date,"starttime":start_time,"studentscount":stucount.get()}
+            database.child("StartClass").child(class_id).set(data_to_save)
+            messagebox.showinfo("Message","Class Ready to Start!")
+            root.destroy()
+      
       
 #connect to the Firebase
 config = {
