@@ -1,18 +1,8 @@
 from tkinter import *
-import mysql.connector
 import cv2
 from tkinter import messagebox
 from datetime import datetime
 import pyrebase
-
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
-cursor = mydb.cursor()
 
 #function for capture images from web cam
 def captureImage(database):
@@ -42,7 +32,6 @@ def captureImage(database):
             img_name = "{}MyImage{}.png".format(imagepath,imagecount)
             cv2.imwrite(img_name,frame)
             print("Image Captured")
-            print("closing...")
             break
         
         '''imagename = "{}MyImage{}.png".format(imagepath,str(imagecount))
@@ -52,7 +41,7 @@ def captureImage(database):
     cam.release()
     cv2.destroyAllWindows()
 
-def endclassbutton(class_id,student_id,root,database):
+def endclassbutton(class_id,student_id,database,root):
     cls_id = class_id
     stu_id = student_id
     
@@ -64,11 +53,12 @@ def endclassbutton(class_id,student_id,root,database):
     current_time = datetime.now().time()
     current_time_string = current_time.strftime('%H:%M:%S')
 
-    data_to_save = {"classid":class_id,"studentid":stu_id,"date":current_date_string,"time":current_time_string}
-    path = str(class_id)+"_"+str(stu_id)
+    data_to_save = {"classid":cls_id,"studentid":stu_id,"date":current_date_string,"time":current_time_string}
+    path = str(cls_id)+"_"+str(stu_id)
     database.child("ClassDataInStudentView").child(path).set(data_to_save)
-    messagebox.showinfo("Message","Data Saved!")
     root.destroy()
+    messagebox.showinfo("Message","Data Saved!")
+    
     
 def assignvalue(cid,sid):
     class_id = cid
@@ -121,7 +111,7 @@ def assignvalue(cid,sid):
                     fg='white',
                     border=0,
                     cursor='hand2',
-                    command=lambda: endclassbutton(class_id,student_id,root,database))
+                    command=lambda: endclassbutton(class_id,student_id,database,root))
     endbtn.pack(fill=X,pady=20,padx=40)
 
     root.mainloop()

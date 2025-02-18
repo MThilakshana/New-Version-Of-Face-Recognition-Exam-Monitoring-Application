@@ -2,19 +2,8 @@ import subprocess
 from tkinter import *
 from tkinter import ttk
 from tkcalendar import Calendar
-import mysql.connector
 from tkinter import messagebox
 import pyrebase
-
-
-#connect to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="learnmaster"
-)
-cursor = mydb.cursor()
 
 def pass_stuid_examid():
     examid = exmid.get()
@@ -31,21 +20,7 @@ def joinexambtn():
         exampath = str(exam_id)
         stupath = str(student_id)
         
-        #connect to the Firebase
-        config = {
-                "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
-                "authDomain": "edumaster-project.firebaseapp.com",
-                "projectId": "edumaster-project",
-                "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
-                "storageBucket": "edumaster-project.appspot.com",
-                "messagingSenderId": "945743272123",
-                "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
-                "measurementId": "G-XNK127X4XJ"
-        }
-        firebase = pyrebase.initialize_app(config)
-        database = firebase.database()
-        
-        readdata = database.child("Exam").child(file_name).get().val()
+        readdata = database.child("SheduleExam").child(exam_id).get().val()
         
         if(readdata==None):
             messagebox.showinfo("Warning","Invalid Exam ID or Student ID")
@@ -63,8 +38,22 @@ def joinexambtn():
             except subprocess.CalledProcessError as e:
                 print("error fount - ", e)
 
+#connect to the Firebase
+config = {
+    "apiKey": "AIzaSyCEu0-KtmUoM6ilvpIYy6vidHnVs93aO78",
+    "authDomain": "edumaster-project.firebaseapp.com",
+    "projectId": "edumaster-project",
+    "databaseURL": "https://edumaster-project-default-rtdb.firebaseio.com/",
+    "storageBucket": "edumaster-project.appspot.com",
+    "messagingSenderId": "945743272123",
+    "appId": "1:945743272123:web:e64de0b72d8b7e6e26f19e",
+    "measurementId": "G-XNK127X4XJ"
+}
+firebase = pyrebase.initialize_app(config)
+database = firebase.database()
+        
 root=Tk()
-root.title('Join To Exams - LearnMaster 1.0')
+root.title('Join To Exams - LearnMaster 2.0')
 root.geometry('775x300+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)

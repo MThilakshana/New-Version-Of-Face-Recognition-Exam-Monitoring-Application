@@ -17,9 +17,11 @@ def joinclassbtn():
         if (readdata==None):
             messagebox.showinfo("Warning","Invalid Class ID or Student ID")
         else:
-            root.iconify() #hide the window
+            #root.iconify() #hide the window
+            root.withdraw()
             from classtimewindow import assignvalue
             assignvalue(class_id,student_id)
+            root.destroy()
 
 #connect to the Firebase
 config = {
