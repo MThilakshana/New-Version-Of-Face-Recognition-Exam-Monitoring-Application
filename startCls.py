@@ -43,10 +43,24 @@ def startClass():
       if class_Name=="" or stucount.get()=="":
             messagebox.showinfo("Warning","Please check the Class ID!")
       else:
-            data_to_save = {"classname":class_Name,"startdate":start_date,"starttime":start_time,"studentscount":stucount.get()}
-            database.child("StartClass").child(class_id).set(data_to_save)
-            messagebox.showinfo("Message","Class Ready to Start!")
-            root.destroy()
+            students = database.child("StudentToClass").child(class_id).get()
+            count = 0
+            students_data = students.val()  # Retrieve dictionary once
+
+            if students_data:  # Ensure there is data before iterating
+                  for raw in students_data:  # Loop through dictionary keys (student IDs)
+                        count += 1
+                        if count == len(students_data):
+                              break
+                        else:
+                              stu_id = students_data[count]
+                              path = str(class_id)+"_"+str(stu_id)
+                              data_to_save = {"classname":class_Name,"classid":class_id,"startdate":start_date,"starttime":start_time,"studentid":stu_id}
+                              database.child("StartClass").child(path).set(data_to_save)
+                  messagebox.showinfo("Message","Class Ready to Start!")
+                  root.destroy()
+            else:
+                  messagebox.showinfo("Warning","Assignt students to class!")
       
       
 #connect to the Firebase

@@ -49,7 +49,7 @@ firebase = pyrebase.initialize_app(config)
 database = firebase.database()
 
 root=Tk()
-root.title('Join To Class - LearnMaster 1.0')
+root.title('Join To Class - LearnMaster 2.0')
 root.geometry('775x300+300+200')
 root.configure(bg="#fff")
 root.resizable(False,False)
