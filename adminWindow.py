@@ -58,6 +58,13 @@ def openexamshedule():
       root.destroy()
       result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/adminWindow.py'], check=True)
 
+#open resultWindow Window
+def resultWindow():
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/ResultWindow.py'], check=True)
+      root.destroy()
+      result = subprocess.run(['python', 'C:/Users/DELL/Desktop/Python/Project parts/final Project/adminWindow.py'], check=True)
+      
+      
 def addDataToStudentTable():
       student_data = {}
       students = database.child("StudentDetails").get()
@@ -275,7 +282,8 @@ seeexamdetails = Button(blueframe,
                       cursor="hand2",
                       width=22,
                       font=('Microsoft YaHei UI Light',13,'bold'),
-                      anchor='w')
+                      anchor='w',
+                      command=resultWindow)
 seeexamdetails.place(x=5,y=400)
 
 exit = Button(blueframe,

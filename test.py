@@ -4,29 +4,27 @@ from tkinter import messagebox
 import pyrebase
 
 def addDataToTreeView():
-      examid = exid_entry.get()
-      stuid = sid_entry.get()
+    examid = exid_entry.get()
+    stuid = sid_entry.get()
       
-      # Get the specific student's data under the given exam ID
-      student_data = database.child("AuthorizedNotDetected").child(examid).child(stuid).get()
+    # Get the specific student's data under the given exam ID
+    student_data = database.child("AuthorizedNotDetected").child(examid).child(stuid).get()
 
-      if student_data.val():
-            values = list(student_data.val().values())  # Get only values, not keys
+    if student_data.val():
+        values = list(student_data.val().values())  # Get only values, not keys
 
-            # Check if values exceed 3
-            if len(values) > 3:
-                  filtered_values = values[:-3]  # Display all except the last three
-            else:
-                  filtered_values = values  # Display all values if 3 or fewer
+        # Check if values exceed 3
+        if len(values) > 3:
+            filtered_values = values[:-3]  # Display all except the last three
+        else:
+            filtered_values = values  # Display all values if 3 or fewer
 
-            # Display only the values
-            count = 1
-            for value in filtered_values:
-                  text = "Authorized person not detected"
-                  my_tree.insert("",'end',values=(count,text,value))
-                  count = count + 1
-      else:
-            print(f"No data found for Exam ID '{examid}' and Student ID '{stuid}'.")
+        # Display only the values
+        for value in filtered_values:
+            print(value)
+    else:
+        print(f"No data found for Exam ID '{examid}' and Student ID '{stuid}'.")
+
                   
 #for det in data.each():
             
